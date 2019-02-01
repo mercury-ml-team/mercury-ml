@@ -1,0 +1,320 @@
+{
+  "global_references":
+  {
+    "number_of_classes": 3,
+    "batch_size": 2,
+    "labels": [0, 1, 2]
+  },
+  "meta_info": {
+    "ml_engine": "keras (tensorflow)",
+    "model_purpose": "test_array",
+    "model_id": "{model_id}",
+    "model_object_name": "{model_purpose}__{model_id}",
+    "data_bunch_name": "array_123"
+  },
+  "init": {
+    "read_source_data": {
+      "name": "read_disk_pandas"
+    },
+    "define_model": {
+      "name": "define_mlp_simple"
+    },
+    "get_optimizer": {
+      "name": "get_keras_optimizer"
+    },
+    "get_loss_function": {
+      "name": "get_keras_loss"
+    },
+    "compile_model": {
+      "name": "compile_model"
+    },
+    "fit": {
+      "name": "fit"
+    },
+    "save_model": {
+      "names": [
+        "save_hdf5"
+      ]
+    },
+    "copy_from_local_to_remote": {
+      "name": "copy_from_disk_to_disk"
+    },
+    "evaluate": {
+      "name": "evaluate"
+    },
+    "callbacks": [
+      {
+        "name": "early_stopping",
+        "params": {
+          "patience": 2,
+          "monitor": "val_loss",
+          "min_delta": 0.001
+        }
+      },
+      {
+        "name": "model_checkpoint",
+        "params": {
+          "filepath": "./example_results/local/{model_id}/model_checkpoint/last_best_model.save_hdf5",
+          "save_best_only": true
+        }
+      }
+    ],
+    "predict": {
+      "name": "predict"
+    },
+    "custom_metrics": {
+      "names": [
+        "evaluate_numpy_auc",
+        "evaluate_numpy_micro_auc"
+      ]
+    },
+    "custom_label_metrics": {
+      "names": [
+        "evaluate_numpy_accuracy",
+        "evaluate_numpy_confusion_matrix"
+      ]
+    },
+    "store_prediction_artifact_locally": {
+      "name": "store_pandas_pickle"
+    },
+    "store_artifact_locally":
+    {
+      "name": "store_dict_json"
+    }
+  },
+  "exec": {
+    "read_source_data": {
+      "params": {
+        "train_params": {
+          "path": "./example_data/{data_bunch_name}/train.csv",
+          "input_format": ".csv",
+          "full_data_columns": [
+            "ID",
+            "ID2",
+            "field1_num",
+            "field2_num",
+            "field3_num",
+            "field4_target",
+            "field5_target",
+            "field6_target"
+          ],
+          "index_columns": [
+            "ID",
+            "ID2"
+          ],
+          "features_columns": [
+            "field1_num",
+            "field2_num",
+            "field3_num"
+          ],
+          "targets_columns": [
+            "field4_target",
+            "field5_target",
+            "field6_target"
+          ]
+        },
+        "valid_params": {
+          "path": "./example_data/{data_bunch_name}/valid.csv",
+          "input_format": {"$ref": "#exec/read_source_data/params/train_params/input_format"},
+          "full_data_columns": {"$ref": "#exec/read_source_data/params/train_params/full_data_columns"},
+          "index_columns": {"$ref": "#exec/read_source_data/params/train_params/index_columns"},
+          "features_columns": {"$ref": "#exec/read_source_data/params/train_params/features_columns"},
+          "targets_columns": {"$ref": "#exec/read_source_data/params/train_params/targets_columns"}
+        },
+        "test_params": {
+          "path": "./example_data/{data_bunch_name}/test.csv",
+          "input_format": {"$ref": "#exec/read_source_data/params/train_params/input_format"},
+          "full_data_columns": {"$ref": "#exec/read_source_data/params/train_params/full_data_columns"},
+          "index_columns": {"$ref": "#exec/read_source_data/params/train_params/index_columns"},
+          "features_columns": {"$ref": "#exec/read_source_data/params/train_params/features_columns"},
+          "targets_columns": {"$ref": "#exec/read_source_data/params/train_params/targets_columns"}
+        }
+      }
+    },
+    "define_model": {
+      "params": {
+       "nb_classes": {"$ref": "#global_references/number_of_classes"},
+       "nb_features": 3,
+       "dense_activation": "relu",
+       "final_activation": "softmax"
+      }
+    },
+    "get_optimizer": {
+      "params": {
+        "optimizer_name": "adam",
+        "optimizer_params": {
+          "lr": 0.0001
+        }
+      }
+    },
+    "get_loss_function": {
+      "params": {
+        "loss_name": "categorical_crossentropy"
+      }
+    },
+    "compile_model": {
+      "params": {
+        "metrics": ["acc"],
+        "weighted_metrics": null,
+        "loss_weights":null,
+        "sample_weight_mode":null,
+        "target_tensors":null
+      }
+    },
+    "fit": {
+      "params": {
+        "batch_size": {"$ref": "#global_references/batch_size"},
+        "epochs": 1
+      },
+      "pre_execution_transformation": {
+        "data_set_names": ["train", "valid", "test"],
+        "transform_then_slice": true,
+        "params": {
+          "transform_to": "numpy",
+          "full_data_wrapper_params": {},
+          "data_wrapper_names": ["features", "targets", "index"]
+        }
+      }
+    },
+    "evaluate": {
+      "data_set_names": [
+        "test"
+      ],
+      "params": {}
+    },
+    "predict": {
+      "data_set_names": [
+        "test"
+      ],
+      "params": {}
+    },
+    "save_model": {
+      "save_hdf5": {
+        "local_dir": "./example_results/local/{model_id}/models",
+        "remote_dir": "./example_results/remote/{model_id}/models",
+        "filename": "{model_object_name}__hdf5",
+        "extension": ".h5",
+        "overwrite_remote": true
+      }
+    },
+    "evaluate_custom_metrics": {
+      "pre_execution_transformation": {
+        "data_set_names": ["test"],
+        "params": {
+          "transform_to": "numpy",
+          "data_wrapper_params": {
+            "predictions": {},
+            "index": {},
+            "targets": {}
+          }
+        }
+      },
+      "data_set_names": ["test"],
+      "params": {}
+    },
+    "evaluate_custom_label_metrics": {
+      "data_set_names": [
+        "test"
+      ],
+      "params": {}
+    },
+    "save_session": {
+      "params": {
+        "local_dir": "./example_results/local/{model_id}/session",
+        "remote_dir": "./example_results/remote/{model_id}/session",
+        "filename": "session.json"
+      }
+    },
+    "save_session_artifacts": {
+      "params": {
+        "local_dir": {"$ref": "#exec/save_session/params/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_session/params/remote_dir"},
+        "filenames": ["fit.ipynb", "fit_config_array.json"]
+      }
+    },
+    "save_formatted_config": {
+      "params": {
+        "local_dir": {"$ref": "#exec/save_session/params/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_session/params/remote_dir"},
+        "filename": "config_formatted.json"
+      }
+    },
+    "prepare_predictions_for_storage": {
+      "pre_execution_transformation": {
+        "data_set_names": ["test"],
+        "params": {
+          "transform_to": "pandas",
+          "data_wrapper_params": {
+            "predictions": {},
+            "index": {},
+            "targets": {}
+          }
+        }
+      },
+      "data_set_names": ["test"],
+      "params": {
+        "predictions": {
+          "left_data_wrapper_name": "index",
+          "right_data_wrapper_name":"predictions",
+          "new_data_wrapper_name":"predictions_for_storage"
+        },
+        "targets": {
+          "left_data_wrapper_name": "index",
+          "right_data_wrapper_name":"targets",
+          "new_data_wrapper_name":"targets_for_storage"
+        }
+      }
+    },
+    "save_predictions": {
+      "data_sets": {
+        "test": {
+          "data_wrapper_name": "predictions_for_storage",
+          "params": {
+            "local_dir": "./example_results/local/{model_id}/predictions/test",
+            "remote_dir": "./example_results/remote/{model_id}/predictions/test",
+            "filename": "{model_object_name}__test__predictions"
+          }
+        }
+      }
+    },
+    "save_targets": {
+      "data_sets": {
+        "test": {
+          "data_wrapper_name": "targets_for_storage",
+          "params": {
+            "local_dir":{"$ref": "#exec/save_predictions/data_sets/test/params/local_dir"},
+            "remote_dir": {"$ref": "#exec/save_predictions/data_sets/test/params/remote_dir"},
+            "filename": "{model_object_name}__test__targets"
+          }
+        }
+      }
+    },
+    "save_metrics": {
+      "data_sets": {
+        "test": {
+          "local_dir": "./example_results/local/{model_id}/metrics/test",
+          "remote_dir": "./example_results/remote/{model_id}/metrics/test",
+          "filename": "{model_object_name}__test__keras_metrics"
+        }
+      }
+    },
+    "save_custom_metrics": {
+      "data_sets": {
+        "test": {
+          "local_dir":{"$ref": "#exec/save_metrics/data_sets/test/local_dir"},
+          "remote_dir": {"$ref": "#exec/save_metrics/data_sets/test/remote_dir"},
+          "filename": "{model_object_name}__test__custom_metrics"
+        }
+      }
+    },
+    "save_custom_label_metrics": {
+      "data_sets": {
+        "test": {
+          "local_dir":{"$ref": "#exec/save_metrics/data_sets/test/local_dir"},
+          "remote_dir": {"$ref": "#exec/save_metrics/data_sets/test/remote_dir"},
+          "filename": "{model_object_name}__test__custom_label_metrics"
+        }
+      }
+    }
+  }
+}

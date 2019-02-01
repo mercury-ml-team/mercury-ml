@@ -1,0 +1,225 @@
+{
+  "global_references":
+  {
+    "number_of_classes": 2,
+    "batch_size": 2,
+    "labels": ["cat", "dog"]
+  },
+  "meta_info": {
+    "ml_engine": "keras (tensorflow)",
+    "model_purpose": "test_generator",
+    "model_id": "caa1f315",
+    "model_object_name": "{model_purpose}__{model_id}",
+    "data_bunch_name": "images_456",
+    "evaluation_session_id": "{evaluation_session_id}"
+  },
+  "init": {
+    "read_source_data": {
+      "name": "read_disk_keras_single_input_iterator"
+    },
+    "get_loss_function": {
+      "name": "get_custom_loss"
+    },
+    "load_model": {
+      "name": "load_hdf5"
+    },
+    "copy_from_local_to_remote": {
+      "name": "copy_from_disk_to_disk",
+      "params": {}
+    },
+    "copy_from_remote_to_local": {
+      "name": "copy_from_disk_to_disk",
+      "params": {}
+    },
+    "evaluate": {
+      "name": "evaluate_generator"
+    },
+    "predict": {
+      "name": "predict_generator"
+    },
+    "custom_metrics": {
+      "names": [
+        "evaluate_numpy_auc",
+        "evaluate_numpy_micro_auc"
+      ]
+    },
+    "custom_label_metrics": {
+      "names": [
+        "evaluate_numpy_accuracy",
+        "evaluate_numpy_confusion_matrix"
+      ]
+    },
+    "store_prediction_artifact_locally": {
+      "name": "store_pandas_pickle"
+    },
+    "store_artifact_locally":
+    {
+      "name": "store_dict_json"
+    }
+  },
+  "exec": {
+    "read_source_data": {
+      "params": {
+        "test_params": {
+          "generator_params": { },
+          "iterator_params": {
+            "directory": "./example_data/{data_bunch_name}/test",
+            "batch_size": {"$ref": "#global_references/batch_size"},
+            "class_mode": "categorical",
+            "color_mode": "rgb",
+            "seed": 12345,
+            "shuffle": false,
+            "target_size": [
+              10,
+              10
+            ]
+          }
+        }
+      }
+    },
+    "get_loss_function": {
+      "params": {
+        "loss_function_getter_name": "get_mock_loss_function",
+        "loss_function_getter_params":  {
+          "mock_value": 42
+        }
+      }
+    },
+    "evaluate": {
+      "data_set_names": [
+        "test"
+      ],
+      "params": {}
+    },
+    "predict": {
+      "data_set_names": [
+        "test"
+      ],
+      "params": {}
+    },
+    "load_model": {
+      "local_dir": "./example_results/local/{model_id}/models",
+      "remote_dir": "./example_results/remote/{model_id}/models",
+      "filename": "{model_object_name}__hdf5",
+      "extension": ".h5",
+      "always_fetch_remote": false
+    },
+    "evaluate_custom_metrics": {
+      "pre_execution_transformation": {
+        "data_set_names": ["test"],
+        "params": {
+          "transform_to": "numpy",
+          "data_wrapper_params": {
+            "predictions": {},
+            "index": {},
+            "targets": {}
+          }
+        }
+      },
+      "data_set_names": ["test"],
+      "params": {}
+    },
+    "evaluate_custom_label_metrics": {
+      "data_set_names": ["test"],
+      "params": {}
+    },
+    "save_evaluation_session": {
+      "params": {
+        "local_dir": "./example_results/local/{model_id}/evaluation_session/{evaluation_session_id}",
+        "remote_dir": "./example_results/remote/{model_id}/evaluation_session/{evaluation_session_id}",
+        "filename": "session.json"
+      }
+    },
+    "save_evaluation_session_artifacts": {
+      "params": {
+        "local_dir": {"$ref": "#exec/save_evaluation_session/params/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_evaluation_session/params/remote_dir"},
+        "filenames": ["evaluate.ipynb", "evaluate_config_generator.json"]
+      }
+    },
+    "save_formatted_config": {
+      "params": {
+        "local_dir": {"$ref": "#exec/save_evaluation_session/params/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_evaluation_session/params/remote_dir"},
+        "filename": "config_formatted.json"
+      }
+    },
+    "prepare_predictions_for_storage": {
+      "pre_execution_transformation": {
+        "data_set_names": ["test"],
+        "params": {
+          "transform_to": "pandas",
+          "data_wrapper_params": {
+            "predictions": {},
+            "index": {},
+            "targets": {}
+          }
+        }
+      },
+      "data_set_names": ["test"],
+      "params": {
+        "predictions": {
+          "left_data_wrapper_name": "index",
+          "right_data_wrapper_name":"predictions",
+          "new_data_wrapper_name":"predictions_for_storage"
+        },
+        "targets": {
+          "left_data_wrapper_name": "index",
+          "right_data_wrapper_name":"targets",
+          "new_data_wrapper_name":"targets_for_storage"
+        }
+      }
+    },
+    "save_predictions": {
+      "data_sets": {
+        "test": {
+          "data_wrapper_name": "predictions_for_storage",
+          "params": {
+            "local_dir": "./example_results/local/{model_id}/predictions/test",
+            "remote_dir": "./example_results/remote/{model_id}/predictions/test",
+            "filename": "{model_object_name}__test__predictions"
+          }
+        }
+      }
+    },
+    "save_targets": {
+      "data_sets": {
+        "test": {
+          "data_wrapper_name": "targets_for_storage",
+          "params": {
+            "local_dir":{"$ref": "#exec/save_predictions/data_sets/test/params/local_dir"},
+            "remote_dir": {"$ref": "#exec/save_predictions/data_sets/test/params/remote_dir"},
+            "filename": "{model_object_name}__test__targets"
+          }
+        }
+      }
+    },
+    "save_metrics": {
+      "data_sets": {
+        "test": {
+          "local_dir": "./example_results/local/{model_id}/metrics/test",
+          "remote_dir": "./example_results/remote/{model_id}/metrics/test",
+          "filename": "{model_object_name}__test__keras_metrics"
+        }
+      }
+    },
+    "save_custom_metrics": {
+      "data_sets": {
+        "test": {
+          "local_dir":{"$ref": "#exec/save_metrics/data_sets/test/local_dir"},
+          "remote_dir": {"$ref": "#exec/save_metrics/data_sets/test/remote_dir"},
+          "filename": "{model_object_name}__test__custom_metrics"
+        }
+      }
+    },
+    "save_custom_label_metrics": {
+      "data_sets": {
+        "test": {
+          "local_dir":{"$ref": "#exec/save_metrics/data_sets/test/local_dir"},
+          "remote_dir": {"$ref": "#exec/save_metrics/data_sets/test/remote_dir"},
+          "filename": "{model_object_name}__test__custom_label_metrics"
+        }
+      }
+    }
+  }
+}

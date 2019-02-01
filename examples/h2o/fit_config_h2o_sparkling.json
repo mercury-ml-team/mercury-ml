@@ -1,0 +1,377 @@
+{
+  "meta_info": {
+    "ml_engine": "h2o",
+    "model_purpose": "test_h2o_spark",
+    "model_id": "{model_id}",
+    "model_object_name": "{model_purpose}__{model_id}",
+    "data_bunch_name": "array_789"
+  },
+  "init": {
+    "initiate_session": {
+      "name": "get_or_create_h2o_sparkling"
+    },
+    "read_source_data": {
+      "name": "read_disk_pandas"
+    },
+    "model_definition": {
+      "name": "rf",
+      "params": {}
+    },
+    "fit": {
+      "name": "fit"
+    },
+    "save_model": {
+      "names": [
+        "save_h2o_model", "save_json_details", "save_pojo", "save_mojo", "save_pojo_jar", "save_mojo_jar"
+      ]
+    },
+    "copy_from_local_to_remote": {
+      "name": "copy_from_disk_to_disk"
+    },
+    "evaluate": {
+      "name": "evaluate"
+    },
+    "evaluate_threshold_metrics": {
+      "name": "evaluate_threshold_metrics"
+    },
+    "predict": {
+      "name": "predict"
+    },
+    "custom_metrics": {
+      "names": [
+        "evaluate_numpy_auc",
+        "evaluate_numpy_micro_auc"
+      ]
+    },
+    "custom_label_metrics": {
+      "names": [
+        "evaluate_numpy_accuracy",
+        "evaluate_numpy_confusion_matrix"
+      ]
+    },
+    "store_prediction_artifact_locally": {
+      "name": "store_h2o_frame"
+    },
+    "store_artifact_locally":
+    {
+      "name": "store_dict_json"
+    }
+  },
+  "exec": {
+    "initiate_session":
+    {
+      "params": {
+        "h2o_context_params":{
+          "auth": null,
+          "verify_ssl_certificates": false,
+          "verbose": true
+        },
+        "h2o_log_level":"ERROR",
+        "spark_session_params":{
+          "spark_config": {
+            "spark.app.name": "ml_workflow_session_{model_id}"
+          },
+          "log_level":"ERROR",
+          "enableHiveSupport":true
+        }
+      }
+    },
+    "read_source_data": {
+      "params": {
+        "train_params": {
+          "path": "./example_data/{data_bunch_name}/train.csv",
+          "input_format": ".csv",
+          "full_data_columns": [
+            "ID",
+            "ID2",
+            "field1_num",
+            "field2_num",
+            "field3_num",
+            "field4_factor",
+            "field5_factor",
+            "field6_target"
+          ],
+          "index_columns": [
+            "ID",
+            "ID2"
+          ],
+          "features_columns": [
+            "field4_factor",
+            "field5_factor",
+            "field1_num",
+            "field2_num",
+            "field3_num"
+          ],
+          "targets_columns": [
+            "field6_target"
+          ]
+        },
+        "valid_params": {
+          "path": "./example_data/{data_bunch_name}/valid.csv",
+          "input_format": ".csv",
+          "full_data_columns": [
+            "ID",
+            "ID2",
+            "field1_num",
+            "field2_num",
+            "field3_num",
+            "field4_factor",
+            "field5_factor",
+            "field6_target"
+          ],
+          "index_columns": [
+            "ID",
+            "ID2"
+          ],
+          "features_columns": [
+            "field4_factor",
+            "field5_factor",
+            "field1_num",
+            "field2_num",
+            "field3_num"
+          ],
+          "targets_columns": [
+            "field6_target"
+          ]
+        },
+        "test_params": {
+          "path": "./example_data/{data_bunch_name}/test.csv",
+          "input_format": ".csv",
+          "full_data_columns": [
+            "ID",
+            "ID2",
+            "field1_num",
+            "field2_num",
+            "field3_num",
+            "field4_factor",
+            "field5_factor",
+            "field6_target"
+          ],
+          "index_columns": [
+            "ID",
+            "ID2"
+          ],
+          "features_columns": [
+            "field4_factor",
+            "field5_factor",
+            "field1_num",
+            "field2_num",
+            "field3_num"
+          ],
+          "targets_columns": [
+            "field6_target"
+          ]
+        }
+      }
+    },
+    "fit": {
+      "params": {
+        "model_id": "{model_id}"
+      },
+      "pre_execution_transformation": {
+        "data_set_names": ["train", "valid", "test"],
+        "transform_then_slice": true,
+        "params": {
+          "transform_to": "h2o_sparkling",
+          "full_data_wrapper_params":{
+            "factor_columns_list":["field4_factor","field5_factor", "field6_target"],
+            "spark_session_params":{},
+            "h2o_sparkling_params":{}
+          },
+          "data_wrapper_names": ["index", "features", "targets"]
+        }
+      }
+    },
+    "evaluate": {
+      "data_set_names": [
+        "test"
+      ],
+      "params": {
+        "metric_names": [
+        "logloss","mse","mae","mean_residual_deviance","rmse","rmsle","residual_deviance","residual_degrees_of_freedom",
+        "null_deviance","null_degrees_of_freedom","aic","auc","gini","r2"
+      ]
+      }
+    },
+    "evaluate_threshold_metrics": {
+      "data_set_names": [
+        "test"
+      ],
+      "params": {
+        "threshold_metric_names": [
+          "f1","f2","f0point5","accuracy","precision","recall","specificity","absolute_mcc","min_per_class_accuracy",
+          "mean_per_class_accuracy","tns","fns","fps","tps","tnr","fnr","fpr","tpr"
+      ]
+      }
+    },
+    "predict": {
+      "data_set_names": [
+        "test"
+      ],
+      "params": {
+        "return_columns": ["p1"]
+      }
+    },
+    "save_model": {
+      "save_h2o_model": {
+        "local_dir": "./example_results/local/{model_id}/models",
+        "remote_dir": "./example_results/remote/{model_id}/models",
+        "filename": "{model_object_name}__h2o",
+        "extension": "",
+        "overwrite_remote": true
+      },
+      "save_json_details": {
+        "local_dir": {"$ref": "#exec/save_model/save_h2o_model/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_model/save_h2o_model/remote_dir"},
+        "filename": "{model_object_name}__json_details",
+        "extension": ".json",
+        "overwrite_remote": true
+      },
+      "save_pojo": {
+        "local_dir": {"$ref": "#exec/save_model/save_h2o_model/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_model/save_h2o_model/remote_dir"},
+        "filename": "{model_object_name}__pojo",
+        "extension": ".java",
+        "overwrite_remote": true
+      },
+      "save_mojo": {
+        "local_dir": {"$ref": "#exec/save_model/save_h2o_model/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_model/save_h2o_model/remote_dir"},
+        "filename": "{model_object_name}__mojo",
+        "extension": ".zip",
+        "overwrite_remote": true
+      },
+      "save_pojo_jar": {
+        "local_dir": {"$ref": "#exec/save_model/save_h2o_model/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_model/save_h2o_model/remote_dir"},
+        "filename": "{model_object_name}__pojo_jar",
+        "extension": ".jar",
+        "overwrite_remote": true
+      },
+      "save_mojo_jar": {
+        "local_dir": {"$ref": "#exec/save_model/save_h2o_model/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_model/save_h2o_model/remote_dir"},
+        "filename": "{model_object_name}__mojo_jar",
+        "extension": ".jar",
+        "overwrite_remote": true
+      }
+    },
+    "evaluate_custom_metrics": {
+      "pre_execution_transformation": {
+        "data_set_names": ["test"],
+        "params": {
+          "transform_to": "numpy",
+          "data_wrapper_params": {
+            "predictions": {},
+            "index": {},
+            "targets": {}
+          }
+        }
+      },
+      "data_set_names": ["test"],
+      "params": {}
+    },
+    "evaluate_custom_label_metrics": {
+      "data_set_names": [
+        "test"
+      ],
+      "params": {}
+    },
+    "save_session": {
+      "params": {
+        "local_dir": "./example_results/local/{model_id}/session",
+        "remote_dir": "./example_results/remote/{model_id}/session",
+        "filename": "session.json"
+      }
+    },
+    "save_session_artifacts": {
+      "params": {
+        "local_dir": {"$ref": "#exec/save_session/params/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_session/params/remote_dir"},
+        "filenames": ["fit.ipynb", "fit_config_h2o_sparkling.json"]
+      }
+    },
+    "save_formatted_config": {
+      "params": {
+        "local_dir": {"$ref": "#exec/save_session/params/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_session/params/remote_dir"},
+        "filename": "config_formatted.json"
+      }
+    },
+    "prepare_predictions_for_storage": {
+      "data_set_names": ["test"],
+      "params": {
+        "predictions": {
+          "left_data_wrapper_name": "index",
+          "right_data_wrapper_name":"predictions",
+          "new_data_wrapper_name":"predictions_for_storage"
+        },
+        "targets": {
+          "left_data_wrapper_name": "index",
+          "right_data_wrapper_name":"targets",
+          "new_data_wrapper_name":"targets_for_storage"
+        }
+      }
+    },
+    "save_predictions": {
+      "data_sets": {
+        "test": {
+          "data_wrapper_name": "predictions_for_storage",
+          "params": {
+            "local_dir": "./example_results/local/{model_id}/predictions/test",
+            "remote_dir": "./example_results/remote/{model_id}/predictions/test",
+            "filename": "{model_object_name}__test__predictions"
+          }
+        }
+      }
+    },
+    "save_targets": {
+      "data_sets": {
+        "test": {
+          "data_wrapper_name": "targets_for_storage",
+          "params": {
+            "local_dir":{"$ref": "#exec/save_predictions/data_sets/test/params/local_dir"},
+            "remote_dir": {"$ref": "#exec/save_predictions/data_sets/test/params/remote_dir"},
+            "filename": "{model_object_name}__test__targets"
+          }
+        }
+      }
+    },
+    "save_metrics": {
+      "data_sets": {
+        "test": {
+          "local_dir": "./example_results/local/{model_id}/metrics/test",
+          "remote_dir": "./example_results/remote/{model_id}/metrics/test",
+          "filename": "{model_object_name}__test__h2o_metrics"
+        }
+      }
+    },
+    "save_threshold_metrics": {
+      "data_sets": {
+        "test": {
+          "local_dir": "./example_results/local/{model_purpose}/{model_id}/data_bunches/{data_bunch_name}/test/metrics",
+          "remote_dir": "./example_results/remote/{model_purpose}/{model_id}/data_bunches/{data_bunch_name}/test/metrics",
+          "filename": "{model_object_name}__test__h2o_threshold_metrics"
+        }
+      }
+    },
+    "save_custom_metrics": {
+      "data_sets": {
+        "test": {
+          "local_dir":{"$ref": "#exec/save_metrics/data_sets/test/local_dir"},
+          "remote_dir": {"$ref": "#exec/save_metrics/data_sets/test/remote_dir"},
+          "filename": "{model_object_name}__test__custom_metrics"
+        }
+      }
+    },
+    "save_custom_label_metrics": {
+      "data_sets": {
+        "test": {
+          "local_dir":{"$ref": "#exec/save_metrics/data_sets/test/local_dir"},
+          "remote_dir": {"$ref": "#exec/save_metrics/data_sets/test/remote_dir"},
+          "filename": "{model_object_name}__test__custom_label_metrics"
+        }
+      }
+    }
+  }
+}
