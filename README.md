@@ -1,22 +1,22 @@
 #  `mercury-ml`
 
-![logo](docs/images/logo_07_200x200.jpg) 
+![logo](docs/images/logo_07_200x200.jpg)
 
 
-In the ancient Roman mythology, the god Mercury was known as the messenger of the god. Wearing winged shoes and a winged 
+In the ancient Roman mythology, the god Mercury was known as the messenger of the god. Wearing winged shoes and a winged
 hat he zipped between Mount Olympus and the kingdoms of men and saw to it that the will of the gods was known.
 
-We've chosen `mercury-ml` as the name of this package because we see its role as very similar. 
+We've chosen `mercury-ml` as the name of this package because we see its role as very similar.
 
-Recent developments in Machine Learning and Data Processing tools have lead to a myriad of except open source libraries 
-each of which provide well developed and transparent APIs. Where it becomes more complicated is when functions from 
-different libraries need to be strung together to form a machine learning workflow. `mercury-ml` is "a messenger of the gods" 
-that enables this to happen. It seeks to break down a Machine Learning project into its typical generic components 
-(such as `read data`, `transform data`, `fit model`, `evaluate model` etc.) and offers a generic modular structure where 
+Recent developments in Machine Learning and Data Processing tools have led to a myriad of except open source libraries
+each of which provide well developed and transparent APIs. Where it becomes more complicated is when functions from
+different libraries need to be strung together to form a machine learning workflow. `mercury-ml` is "a messenger of the gods"
+that enables this to happen. It seeks to break down a Machine Learning project into its typical generic components
+(such as `read data`, `transform data`, `fit model`, `evaluate model` etc.) and offers a generic modular structure where
 implementations for specific methods and technologies can slot in.
 
-These broken down components can then be chained together into a coherent, easily configurable and Workflow for fitting, 
-evaluating and (coming soon!) serving Machine Learning models. 
+These broken down components can then be chained together into a coherent, easily configurable workflow for fitting,
+evaluating and (coming soon!) serving Machine Learning models.
 
 
 ## Components
@@ -30,15 +30,15 @@ Within these sections there is a further subdivision into three APIs:
 * `containers`: IoC containers over which the desired providers can be fetched.
 * `tasks`: Small predefined chunks of work, mostly stringing together a handful of logical steps to be executed by various providers
 
-You can interact with `ML-Mercury` via any or all of these APIs. They deliver different levels of abstraction depending 
+You can interact with `ML-Mercury` via any or all of these APIs. They deliver different levels of abstraction depending
 on what you need. You can also easily mix in your own custom providers.
 
-To understand the purpose and function of each individual provider, container and task, please refer to the `mercury-ml` 
+To understand the purpose and function of each individual provider, container and task, please refer to the `mercury-ml`
 API documentation.
 
 ## Dependencies
 
-Since `mercury-ml` functions as a facilitator for workflows based on various different packages it's dependencies will
+Since `mercury-ml` functions as a facilitator for workflows based on various different packages its dependencies will
 be determined by which functions are used. The core dependencies have been minimized to only a handful of packages.
 
 ##### Core dependencies
@@ -74,17 +74,22 @@ install extra dependencies, you can use the following hints:
 * `pip install mercury-ml[h2o-sparkling]`  will install [`h2o`, `pyspark`, `h2o-pysparkling`]
 * `pip install mercury-ml[s3]`  will install [`boto3`]
 * `pip install mercury-ml[gcs]`  will install [`google-cloud-storage`]
-            
+
 
 
 ## Usage
 
 
-`mercury-ml` aims to offer simplified access to functionality at different levels of abstraction. 
- 
-Below are a four simple examples that each do the same thing: save a Keras model to S3. They do so at differnt levels
-of abstraction: 1) Without using `mercury-ml` (i.e. directly using the underlying dependencies), 2) using the `providers` API,
-3) using the `containers` API, 4) using the `tasks` API (in conjunction with the `containers` API). Each of these examples
+`mercury-ml` aims to offer simplified access to functionality at different levels of abstraction.
+
+Below are four simple examples that each do the same thing: save a Keras model to S3. They do so at different levels
+of abstraction:
+1. Without using `mercury-ml` (i.e. directly using the underlying dependencies)
+2. Using the `providers` API
+3. Using the `containers` API
+4. Using the `tasks` API (in conjunction with the `containers` API)
+
+Each of these examples
 are perfectly valid, though in certain circumstances one may make more sense than the other.
 
 For more complete examples, please see the `examples` directory in this repository.
@@ -102,7 +107,7 @@ remote_dir = "my-bucket/remote-model"
 ```
 
 
-##### 1. Example via directly accessing the underlying libraries (i.e. withou using `mercury-ml`)
+##### 1. Example via directly accessing the underlying libraries (i.e. without using `mercury-ml`)
 
 Using the underlying libraries rather than using the `mercury-ml` APIs makes sense when you want the maximum flexibility to
 configure how these libraries are used.
@@ -132,8 +137,8 @@ s3.Object(s3_bucket, s3_key).put(Body=open(local_path, "rb"))
 
 ##### 2. Example via ``providers``
 
-Using the `providers` API makes the most sense if you can to hardcode the the providers you want to use. For example
-in the code snippet be, you can only use `model_saving.save_keras_hdf5` and `from_disk.copy_from_disk_to_s3`. If you 
+Using the `providers` API makes the most sense if you want to hardcode the providers you want to use. For example
+in the code snippet be, you can only use `model_saving.save_keras_hdf5` and `from_disk.copy_from_disk_to_s3`. If you
 want to save the model in a different format, or copy it to a different store you must change your code to do so.
 
 ```python
@@ -156,9 +161,9 @@ from_disk.copy_from_disk_to_s3(source_dir=local_dir,
 
 ##### 3. Example via ``containers``
 
-Using the `containers` API makes the most sense when you which to steer your workflow via a configuration file. The containers
-are just light-weight classes that allow you to access various similar providers from a single location. For example, 
-the function used above, `model_saving.save_keras_hdf5` can be access via a container as `ModelSavers.hdf5`. Using the 
+Using the `containers` API makes the most sense when you want to steer your workflow via a configuration file. The containers
+are just light-weight classes that allow you to access various similar providers from a single location. For example,
+the function used above, `model_saving.save_keras_hdf5` can be accessed via a container as `ModelSavers.hdf5`. Using the
 `getattr` function this can also be accessed as `getattr(ArtifactCopiers, "hdf5")` allowing us to easily parameterize
 this in a config.
 
@@ -192,8 +197,8 @@ copy_from_local_to_remote(source_dir=local_dir,
 
 Using the tasks API makes sense when you want to use a single function that defines a small workflow that involves more
 than one `provider` and requires multiple steps. For example, the `store_model` task below is injected with a `save_model`
-and a `copy_from_local_to_remote` provider and proceeds to use these `providers` first save a model locally and then
-copy it to a remote location (in this example, to S3)
+and a `copy_from_local_to_remote` provider and proceeds to use these `providers` first to save a model locally and then
+to copy it to a remote location (in this example, to S3)
 
 ```python
 from mercury_ml.common.tasks import store_model
@@ -217,20 +222,20 @@ store_model(save_model=save_model,
 
 ## Data in `mercury-ml`
 
-It is worth saying a few words about how `mercury-ml` deals with data as this forms the backbone of how it is able to 
+It is worth saying a few words about how `mercury-ml` deals with data as this forms the backbone of how it is able to
 facilitate robust machine learning workflows. There are three concepts to understand:
-1. `DataWrapper`. An instance of the `DataWrapper` class wraps an underlying structure (for example a `Pandas DataFrame`, 
+1. `DataWrapper`. An instance of the `DataWrapper` class wraps an underlying structure (for example a `Pandas DataFrame`,
 `Spark DataFrame`, `Numpy Array` or `Keras ImageDataGenerator`) into an object that has the following characteristics:
-    * It has the attributes `underlying` (which gives you direct access to the data structure that has been wrapped) 
-    and `field_names`, which is a list with the names of the in the underlying data (`field_names` is not always relevant, 
+    * It has the attributes `underlying` (which gives you direct access to the data structure that has been wrapped)
+    and `field_names`, which is a list with the names of the in the underlying data (`field_names` is not always relevant,
     and may be set to `None`).
     * It has various functions that transform from one DataWrapper to another. For example, `PandasDataWrapper.to_numpy()`
     will yield an instance of `NumpyDataWrapper`
-2. `DataSet`. An instance of the `DataSet` class is a container for various instances of `DataWrapper`. A `DataSet` will 
-typically consist of `DataWrappers` for `full_data`, `index`, `features` and `targets` but this is not predefined. It 
+2. `DataSet`. An instance of the `DataSet` class is a container for various instances of `DataWrapper`. A `DataSet` will
+typically consist of `DataWrappers` for `full_data`, `index`, `features` and `targets` but this is not predefined. It
 also contains some functionality that facilitates the transformation into a `DataSet` with `DataWrappers` of a different
 type.
-3. `DataBunch`. An instance of the `DataBunch` class is essentially just a container that holds one or more `DataSet` 
+3. `DataBunch`. An instance of the `DataBunch` class is essentially just a container that holds one or more `DataSet`
 instances. A `DataBunch` will typically consist of `train`, `valid` and `test` `DataSets`.
 
 ### Example usage:
@@ -266,7 +271,7 @@ data_bunch = DataBunch(data_sets_dict={
 
 ```
 
-You could also add additional additional DataSets to the DataBunch, either when initially constructing:
+You could also add additional DataSets to the DataBunch, either when initially constructing:
 
 ```python
 data_bunch = DataBunch(data_sets_dict={
@@ -285,4 +290,3 @@ data_bunch.add_data_set(data_set_name="train", data_set=train_data_set)
 data_bunch.add_data_set(data_set_name="valid", data_set=valid_data_set)
 data_bunch.add_data_set(data_set_name="test", data_set=test_data_set)
 ```
-
