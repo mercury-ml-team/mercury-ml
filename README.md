@@ -65,16 +65,7 @@ be determined by which functions are used. The core dependencies have been minim
 
 ## Installation
 
-`mercury-ml` can be installed from PyPi with `pip install mercury-ml`. This will also install the core dependencies. To additionally
-install extra dependencies, you can use the following hints:
-
-* `pip install mercury-ml[keras]` will install [`tensorflow`, `keras`, `pillow`]
-* `pip install mercury-ml[keras-gpu]`  will install [`tensorflow-gpu`, `keras`, `pillow`]
-* `pip install mercury-ml[h2o]`  will install [`h2o`]
-* `pip install mercury-ml[h2o-sparkling]`  will install [`h2o`, `pyspark`, `h2o-pysparkling`]
-* `pip install mercury-ml[s3]`  will install [`boto3`]
-* `pip install mercury-ml[gcs]`  will install [`google-cloud-storage`]
-
+`mercury-ml` can be installed from PyPi with `pip install mercury-ml`. This will also install the core dependencies. 
 
 
 ## Usage
