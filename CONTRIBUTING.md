@@ -38,5 +38,5 @@ Pull requests can be submiting onto the `develop` branch. To submit a pull reque
 
 ### Write Documentation
 
-The ML-Workflow package could always use more documentation, whether as code examples, as part of the official docs or in docstrings!
+The `mercury-ml` package could always use more documentation, whether as code examples, as part of the official docs or in docstrings!
 
