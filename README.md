@@ -3,7 +3,7 @@
 ![logo](docs/images/logo_07_200x200.jpg)
 
 
-In the ancient Roman mythology, the god Mercury was known as the messenger of the god. Wearing winged shoes and a winged
+In the ancient Roman mythology, the god Mercury was known as the messenger of the gods. Wearing winged shoes and a winged
 hat he zipped between Mount Olympus and the kingdoms of men and saw to it that the will of the gods was known.
 
 We've chosen `mercury-ml` as the name of this package because we see its role as very similar.
