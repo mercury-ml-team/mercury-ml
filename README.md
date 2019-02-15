@@ -30,7 +30,7 @@ Within these sections there is a further subdivision into three APIs:
 * `containers`: IoC containers over which the desired providers can be fetched.
 * `tasks`: Small predefined chunks of work, mostly stringing together a handful of logical steps to be executed by various providers
 
-You can interact with `ML-Mercury` via any or all of these APIs. They deliver different levels of abstraction depending
+You can interact with `mercury-ml` via any or all of these APIs. They deliver different levels of abstraction depending
 on what you need. You can also easily mix in your own custom providers.
 
 To understand the purpose and function of each individual provider, container and task, please refer to the `mercury-ml`
