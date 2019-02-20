@@ -64,7 +64,7 @@ def copy_from_disk_to_hdfs(source_dir, target_dir, filename, overwrite=False, de
                          os.path.join(target_dir, filename)])
 
 
-def copy_from_disk_to_s3(source_dir, target_dir, filename, overwrite=False, delete_source=False, s3_session_params=None,
+def copy_from_disk_to_s3(source_dir, target_dir, overwrite=False, delete_source=False, s3_session_params=None,
                          reuse_existing=True):
     """
     Moves a file from Disk to S3
@@ -90,7 +90,8 @@ def copy_from_disk_to_s3(source_dir, target_dir, filename, overwrite=False, dele
 
     s3_bucket_name, s3_path = target_dir.split("/", 1)
 
-    s3.Object(s3_bucket_name, s3_path + "/" + filename).put(Body=open(source_dir + "/" + filename, "rb"))
+    if overwrite or not _s3_key_exists(s3, target_s3_bucket_name, target_s3_key):
+        s3.Object(s3_bucket_name, s3_key).put(Body=open(source_dir + "/" + filename, "rb"))
 
     if delete_source:
         os.remove(source_dir + "/" + filename)
@@ -127,3 +128,10 @@ def _make_local_path(path_name):
         path_name = os.path.join(os.getcwd(), path_name)
         path_name = os.path.abspath(path_name)
     return path_name
+
+def _s3_key_exists(s3, s3_bucket, s3_key):
+    content = s3.head_object(Bucket=s3_bucket, Key=s3_key)
+    if content.get('ResponseMetadata', None) is not None:
+        return True
+    else:
+        return False

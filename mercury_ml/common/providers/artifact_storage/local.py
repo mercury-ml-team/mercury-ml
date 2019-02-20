@@ -102,7 +102,7 @@ def store_dict_json(data, directory, filename):
     if not os.path.isdir(directory):
         os.makedirs(directory)
 
-    filepath = os.path.join(directory, filename)
+    filepath = os.path.join(directory, filename + ".json")
     with open(filepath, "w") as f:
         json.dump(data, f, indent=2)
 
