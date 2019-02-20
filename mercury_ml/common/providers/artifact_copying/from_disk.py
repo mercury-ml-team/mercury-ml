@@ -64,7 +64,7 @@ def copy_from_disk_to_hdfs(source_dir, target_dir, filename, overwrite=False, de
                          os.path.join(target_dir, filename)])
 
 
-def copy_from_disk_to_s3(source_dir, target_dir, overwrite=False, delete_source=False, s3_session_params=None,
+def copy_from_disk_to_s3(source_dir, target_dir, filename, overwrite=False, delete_source=False, s3_session_params=None,
                          reuse_existing=True):
     """
     Moves a file from Disk to S3
@@ -89,8 +89,9 @@ def copy_from_disk_to_s3(source_dir, target_dir, overwrite=False, delete_source=
         s3 = S3Singleton(**s3_session_params).s3
 
     s3_bucket_name, s3_path = target_dir.split("/", 1)
+    s3_key = s3_path + "/" + filename
 
-    if overwrite or not _s3_key_exists(s3, target_s3_bucket_name, target_s3_key):
+    if overwrite or not _s3_key_exists(s3, s3_bucket_name, s3_key):
         s3.Object(s3_bucket_name, s3_key).put(Body=open(source_dir + "/" + filename, "rb"))
 
     if delete_source:
