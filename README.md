@@ -57,7 +57,7 @@ be determined by which functions are used. The core dependencies have been minim
 
 ##### Workflows using H2O Sparkling:
 * `pyspark`
-* `h2o-pysparkling`
+* `h2o-pysparkling-{spark-version}` (e.g. if you installed `pyspark==2.4`, you should install `h2o-pysparkling-2.4`)
 
 ##### Remote storage dependencies:
 * AWS S3: `boto3`
