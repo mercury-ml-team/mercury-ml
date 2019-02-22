@@ -42,6 +42,15 @@ class LocalArtifactStorers:
     store_dict_json = local.store_dict_json
     store_h2o_frame = local.store_h2o_frame
 
+
+class MongoArtifactStorers:
+    """IoC container for MongoArtifactStorers for saving config and session artifacts on MongoDB."""
+
+    from mercury_ml.common.providers.artifact_storage import mongo
+
+    store_dict_on_mongo = mongo.store_dict_on_mongo
+
+
 class ArtifactCopiers:
     """IoC container of FileMover providers for moving saved models from local to remote store"""
 

@@ -42,8 +42,9 @@ def read_test_data_bunch(read_data_set, test_params):
 
 
 # artifact storage
-def store_artifacts(store_artifact_locally, copy_from_local_to_remote, data, local_dir,
-                    filename, remote_dir=None, overwrite_remote=True, keep_local=True):
+def store_artifacts(store_artifact_locally, copy_from_local_to_remote, data, local_dir, filename,
+                    store_artifact_on_mongo=None, mongo_params=None,
+                    remote_dir=None, overwrite_remote=True, keep_local=True):
 
     """
     Uses "store_artifact_locally" to store artifacts to local disk. Then uses "copy_from_local_to_remote" to also store
@@ -54,6 +55,10 @@ def store_artifacts(store_artifact_locally, copy_from_local_to_remote, data, loc
     :param data: The artifact to be stored
     :param string local_dir: The local directory where the artifact should be stored
     :param string filename: The filename under which the artifact should be stored
+    :param callable store_artifact_on_mongo: A function that stores artifacts to a collection on MongoDB
+    :param dict mongo_params: HDictionary for the keys to wrap the data to be saved as a document and the connection params. Expected keys are:
+        "doc_key": Hierarchical keys in the form of key1\key2\key3... to wrap the underlying data to be stored.
+        "conn_params": MongoDB connection params, where "host", "database" and "collection" keys are present within
     :param string remote_dir: The remote "directory" where the artifact should be copied. If None then copying to remote is skipped
     :param bool overwrite_remote: If true then if the artifact already exists in the remote location it will be overwritten
     :param bool keep_local: If false then the local artifact will be deleted after copying to remote
@@ -72,6 +77,9 @@ def store_artifacts(store_artifact_locally, copy_from_local_to_remote, data, loc
                                   filename=os.path.basename(filepath),
                                   overwrite=overwrite_remote,
                                   delete_source=not keep_local)
+
+    if mongo_params:
+        store_artifact_on_mongo(data, mongo_params)
 
 # metric evaluation
 def evaluate_metrics(data_set, custom_metrics_dict):
