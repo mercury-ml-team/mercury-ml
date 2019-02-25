@@ -17,7 +17,8 @@ setup(name="mercury-ml",
             "h2o": ["h2o"],
             "h2o-sparkling": ["h2o", "pyspark", "h2o-pysparkling"],
             "s3": ["boto3"],
-            "gcs": ["google-cloud-storage"]
+            "gcs": ["google-cloud-storage"],
+            "mongo": ["pymongo"]
             },
       python_requires=">=3.5",
       zip_safe=False)

@@ -42,8 +42,8 @@ def read_test_data_bunch(read_data_set, test_params):
 
 
 # artifact storage
-def store_artifacts(store_artifact_locally, copy_from_local_to_remote, data, local_dir,
-                    filename, remote_dir=None, overwrite_remote=True, keep_local=True):
+def store_artifacts(store_artifact_locally, copy_from_local_to_remote, data, local_dir, filename, remote_dir=None,
+                    overwrite_remote=True, keep_local=True, copy_from_local_to_remote_kwargs=None):
 
     """
     Uses "store_artifact_locally" to store artifacts to local disk. Then uses "copy_from_local_to_remote" to also store
@@ -66,12 +66,16 @@ def store_artifacts(store_artifact_locally, copy_from_local_to_remote, data, loc
                                       filename=filename)
 
     # copy to remote artifact store
+    if not copy_from_local_to_remote_kwargs:
+        copy_from_local_to_remote_kwargs={}
+
     if remote_dir:
         copy_from_local_to_remote(source_dir=local_dir,
                                   target_dir=remote_dir,
                                   filename=os.path.basename(filepath),
                                   overwrite=overwrite_remote,
-                                  delete_source=not keep_local)
+                                  delete_source=not keep_local,
+                                  **copy_from_local_to_remote_kwargs)
 
 # metric evaluation
 def evaluate_metrics(data_set, custom_metrics_dict):

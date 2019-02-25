@@ -36,7 +36,7 @@ def copy_from_s3_to_disk(source_dir, target_dir, filename, overwrite=False, dele
                                      target_dir + "/" + filename)
 
         if delete_source:
-            s3.delete_objects(Bucket=s3_bucket_name, Delete={'Objects': [s3_path + "/" + filename]})
+            s3.delete_objects(Bucket=s3_bucket_name, Delete={"Objects": [s3_path + "/" + filename]})
 
 
 def copy_from_s3_to_s3(source_dir, target_dir, filename=None, overwrite=False, delete_source=False,

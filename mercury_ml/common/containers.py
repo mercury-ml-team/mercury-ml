@@ -35,12 +35,13 @@ class CustomLabelMetrics:
 
 
 class LocalArtifactStorers:
-    from mercury_ml.common.providers.artifact_storage import local
+    from mercury_ml.common.providers.artifact_storage import local, mongo
 
     store_pandas_pickle = local.store_pandas_pickle
     store_pandas_json = local.store_pandas_json
     store_dict_json = local.store_dict_json
     store_h2o_frame = local.store_h2o_frame
+    store_dict_on_mongo = mongo.store_dict_on_mongo
 
 class ArtifactCopiers:
     """IoC container of FileMover providers for moving saved models from local to remote store"""
@@ -52,7 +53,11 @@ class ArtifactCopiers:
     copy_from_disk_to_hdfs = from_disk.copy_from_disk_to_hdfs
     copy_from_disk_to_s3 = from_disk.copy_from_disk_to_s3
     copy_from_disk_to_gcs = from_disk.copy_from_disk_to_gcs
+    copy_from_disk_to_mongo = from_disk.copy_from_disk_to_mongo
 
     copy_from_s3_to_disk = from_s3.copy_from_s3_to_disk
     copy_from_hdfs_to_disk = from_hdfs.copy_from_hdfs_to_disk
     copy_from_gcs_to_disk = from_gcs.copy_from_gcs_to_disk
+
+
+

@@ -1,6 +1,7 @@
 import shutil
 import os
 import subprocess
+import json
 
 def copy_from_disk_to_disk(source_dir, target_dir, filename, overwrite=False, delete_source=False):
     """
@@ -38,7 +39,7 @@ def copy_from_disk_to_disk(source_dir, target_dir, filename, overwrite=False, de
             os.remove(os.path.join(source_dir, filename))
         else:
             raise ChildProcessError(
-                "Delete Source was activated but copy file to new location failed")
+                "Delete Source was activated but copying file to new location failed")
 
 
 def copy_from_disk_to_hdfs(source_dir, target_dir, filename, overwrite=False, delete_source=False):
@@ -64,6 +65,36 @@ def copy_from_disk_to_hdfs(source_dir, target_dir, filename, overwrite=False, de
         subprocess.call(["hadoop", "fs", "-copyFromLocal", os.path.join(source_dir, filename),
                          os.path.join(target_dir, filename)])
 
+def copy_from_disk_to_mongo(source_dir, target_dir, filename, database_name, collection_name,
+                            mongo_client_params, document_key_separator="/", reuse_existing=True,
+                            overwrite=True, delete_source=False):
+
+    source_path = os.path.join(source_dir, filename)
+
+    with open(source_path, "r") as f:
+        data = json.load(f)
+
+    from mercury_ml.common.providers.artifact_storage.mongo import store_dict_on_mongo
+    document_id, document_key = _get_document_id_and_key_from_path(target_dir)
+
+    store_dict_on_mongo(data=data,
+                        document_id=document_id,
+                        database_name=database_name,
+                        collection_name=collection_name,
+                        mongo_client_params=mongo_client_params,
+                        document_key=document_key,
+                        document_key_separator=document_key_separator,
+                        reuse_existing=reuse_existing,
+                        overwrite=overwrite)
+
+    if delete_source == True:
+        os.remove(os.path.join(source_dir, filename))
+
+def _get_document_id_and_key_from_path(path):
+    document_key="/".join(path.strip("/").split('/')[1:])
+    document_id="/".join(path.strip("/").split('/')[:1])
+
+    return document_id, document_key
 
 def copy_from_disk_to_s3(source_dir, target_dir, filename, overwrite=False, delete_source=False, s3_session_params=None,
                          reuse_existing=True):
