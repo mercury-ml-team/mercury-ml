@@ -19,7 +19,7 @@ def recursively_update_config(config, string_formatting_dict):
 
     For example:
     > config = {
-    >    "filename": "{model_purpose}_{model_id}_hdf5.h5",
+    >    "filename": "{model_purpose}_{session_id}_hdf5.h5",
     >    "save_path": "./results/{model_purpose}"
     > }
     >
