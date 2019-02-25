@@ -8,10 +8,12 @@
   "meta_info": {
     "ml_engine": "keras (tensorflow)",
     "model_purpose": "test_generator",
-    "model_id": "caa1f315",
-    "model_object_name": "{model_purpose}__{model_id}",
+    "session_id": "16c534ee22ec4a068e0ebe1dfaa2f0d9",
+    "model_object_name": "{model_purpose}__{session_id}",
     "data_bunch_name": "images_456",
-    "evaluation_session_id": "{evaluation_session_id}"
+    "evaluation_session_id": "{evaluation_session_id}",
+    "notebook_filepath": "{notebook_filepath}",
+    "config_filepath": "{config_filepath}"
   },
   "init": {
     "read_source_data": {
@@ -98,8 +100,8 @@
       "params": {}
     },
     "load_model": {
-      "local_dir": "./example_results/local/{model_id}/models",
-      "remote_dir": "./example_results/remote/{model_id}/models",
+      "local_dir": "./example_results/local/{session_id}/models",
+      "remote_dir": "./example_results/remote/{session_id}/models",
       "filename": "{model_object_name}__hdf5",
       "extension": ".h5",
       "always_fetch_remote": false
@@ -125,23 +127,38 @@
     },
     "save_evaluation_session": {
       "params": {
-        "local_dir": "./example_results/local/{model_id}/evaluation_session/{evaluation_session_id}",
-        "remote_dir": "./example_results/remote/{model_id}/evaluation_session/{evaluation_session_id}",
-        "filename": "session.json"
+        "local_dir": "./example_results/local/{session_id}/evaluation_session/{evaluation_session_id}",
+        "remote_dir": "./example_results/remote/{session_id}/evaluation_session/{evaluation_session_id}",
+        "filename": "evaluation_session"
       }
     },
     "save_evaluation_session_artifacts": {
-      "params": {
-        "local_dir": {"$ref": "#exec/save_evaluation_session/params/local_dir"},
-        "remote_dir": {"$ref": "#exec/save_evaluation_session/params/remote_dir"},
-        "filenames": ["evaluate.ipynb", "evaluate_config_generator.json"]
-      }
+        "artifacts": [
+          {
+            "artifact_path": "{config_filepath}",
+            "local_dir": {
+              "$ref": "#exec/save_evaluation_session/params/local_dir"
+            },
+            "remote_dir": {
+              "$ref": "#exec/save_evaluation_session/params/remote_dir"
+            }
+          },
+          {
+            "artifact_path": "{notebook_filepath}",
+            "local_dir": {
+              "$ref": "#exec/save_evaluation_session/params/local_dir"
+            },
+            "remote_dir": {
+              "$ref": "#exec/save_evaluation_session/params/remote_dir"
+            }
+          }
+        ]
     },
     "save_formatted_config": {
       "params": {
         "local_dir": {"$ref": "#exec/save_evaluation_session/params/local_dir"},
         "remote_dir": {"$ref": "#exec/save_evaluation_session/params/remote_dir"},
-        "filename": "config_formatted.json"
+        "filename": "config_formatted"
       }
     },
     "prepare_predictions_for_storage": {
@@ -175,8 +192,8 @@
         "test": {
           "data_wrapper_name": "predictions_for_storage",
           "params": {
-            "local_dir": "./example_results/local/{model_id}/predictions/test",
-            "remote_dir": "./example_results/remote/{model_id}/predictions/test",
+            "local_dir": "./example_results/local/{session_id}/predictions/test",
+            "remote_dir": "./example_results/remote/{session_id}/predictions/test",
             "filename": "{model_object_name}__test__predictions"
           }
         }
@@ -197,8 +214,8 @@
     "save_metrics": {
       "data_sets": {
         "test": {
-          "local_dir": "./example_results/local/{model_id}/metrics/test",
-          "remote_dir": "./example_results/remote/{model_id}/metrics/test",
+          "local_dir": "./example_results/local/{session_id}/metrics/test",
+          "remote_dir": "./example_results/remote/{session_id}/metrics/test",
           "filename": "{model_object_name}__test__keras_metrics"
         }
       }
