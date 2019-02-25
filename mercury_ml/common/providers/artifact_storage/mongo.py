@@ -1,66 +1,69 @@
-from pymongo import MongoClient
-
-KEY_SEPARATOR = "/"
-
-def __format_doc_key(mongo_doc_key, sep):
+def store_dict_on_mongo(data, document_id, database_name, collection_name, mongo_client_params, document_key="",
+                        document_key_separator="/", reuse_existing=True, overwrite=True):
     """
-    Parses the mongo_doc_key parameter, splitting the given string into parts, using a separator.
-    Takes the first part as a header key and bundles the rest of the keys in a list.
-    :param string mongo_doc_key: Path-like key, representing a hierarchy for a nested document structure
-    :param string sep: Separator string to parse the nested keys
-    :return: (string, list) tuple containing (header_key, body_keys), where header_key is the first value as a string
-    and the body_keys are the rest of the keys as a list
-    """
-    header_key = mongo_doc_key
-    body_keys = []
+    Takes a dictionary input and stores it in an appropriate key in MongoDB
 
-    if KEY_SEPARATOR in mongo_doc_key:
-        split_keys = mongo_doc_key.split(sep)
-        header_key = split_keys[0]
-        body_keys = split_keys[1:]
+    :param dict data: A dictionary with the data to be stored
+    :param document_id: The unique id, corresponding to the _id of the documented to be upserted (updated / inserted to) is found
+    :param string database_name: The name of the database where the document to be upserted to is found
+    :param string collection_name: The name of the collection where the document to be upserted to is found
+    :param dict mongo_client_params: Paramters to be passed to the MongoClient constructor
+    :param string document_key: a string representing the key where the data should be stored. For example, a key
+    "metrics/test" will store will store the data in the format:
+    {
+        "_id": document_id
+        "metrics" : {
+            "test": data
+        }
+    }
+    :param string document_key_separator: The separator with which to parse the document_key. Default "/"
+    :param bool reuse_existing: If False a new MongoClient connection will be created every time the function is called.
+    If True an existing connection will be reused.
 
-    return header_key, body_keys
-
-
-def store_dict_on_mongo(data, mongo_params_dict):
-    """
-    Saves the given dict on MongoDB, by wrapping it as a nested dictionary with the given keys.
-
-    :param dict data: Data to be wrapped and saved
-    :param dict mongo_params_dict: Dictionary for the keys to wrap the data to be saved as a document and the connection params.
-    Expected keys are:
-        "doc_key": Hierarchical keys in the form of key1\key2\key3... to wrap the underlying data to be stored.
-        "conn_params": MongoDB connection params, where "host", "database" and "collection" keys are present within.
     :return:
     """
+    if not reuse_existing:
+        from pymongo import MongoClient
+        mongo_client = MongoClient(**mongo_client_params)
+    else:
+        from mercury_ml.common.providers.artifact_storage import MongoClientSingleton
+        mongo_client = MongoClientSingleton(**mongo_client_params).client
 
-    mongo_client = MongoClient(host=mongo_params_dict["conn_params"]["host"])
+    mongo_db = getattr(mongo_client, database_name)
+    mongo_collection = getattr(mongo_db, collection_name)
 
-    mongo_db = getattr(mongo_client, mongo_params_dict["conn_params"]["database"])
-    mongo_collection = getattr(mongo_db, mongo_params_dict["conn_params"]["collection"])
+    wrapped_data = _make_wrapped_dictionary(document_key=document_key,
+                                            document_key_separator=document_key_separator,
+                                            data=data)
 
-    # Create a nested dictionary with the supplied nested keys
-    # e.g. if you configure your keys as "{model_id}/custom_metrics/test"
-    # the dict to be stored will be {"MODEL_ID"}:
-    # ...................................{"custom_metrics":
-    # .......................................{"test":
-    # ............................................DATA"
-    # .......................................}
 
-    mongo_doc_key = mongo_params_dict["doc_key"]
-    header_key, body_keys = __format_doc_key(mongo_doc_key, KEY_SEPARATOR)
 
-    header_data = {"model_id": header_key}
+    if overwrite or not _document_exists(mongo_collection, document_id):
+        mongo_collection.update_one(
+            {"_id": document_id},
+            {"$set": wrapped_data},
+            upsert=True
+        )
+    else:
+        print("Document with _id {} in collection {} on database {} already exists and 'overwrite' has been set to False. Nothing will be written to MongoDB".format(document_id, collection_name, database_name))
 
-    wrapped_data = data
-    for key in reversed(body_keys):
-        wrapped_data = {key:wrapped_data}
 
-    mongo_collection.update(
-        header_data,
-        {
-            "$set": wrapped_data,
-            "$setOnInsert": header_data
-        },
-        upsert= True
-    )
+def _document_exists(mongo_collection, document_id):
+    cursor = mongo_collection.find({document_id: {"$exists": True}}).limit(1)
+
+    if cursor.count() > 0:
+        return True
+    else:
+        return False
+
+def _make_wrapped_dictionary(document_key, data, document_key_separator="/"):
+    if not document_key or document_key == "":
+        return data
+    else:
+        split_keys = document_key.split(document_key_separator)
+
+        wrapped_data = data
+        for key in reversed(split_keys):
+            wrapped_data = {key: wrapped_data}
+
+        return wrapped_data

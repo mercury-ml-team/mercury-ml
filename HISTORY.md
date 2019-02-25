@@ -1,5 +1,8 @@
 # History
 
+## 0.1.2
+- It is now possible to store dictionary artifacts to MongoDB
+
 ## 0.1.1
 
 - Keras Model fitting methods at `mercury_ml.keras.providers.model_fitting` now allow for keyboard interrupts (either last, or last_best model will be returned)

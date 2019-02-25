@@ -1,18 +1,5 @@
 """Classes that facilitate moving data from one store into another"""
-
-def singleton(TheClass):
-    """ decorator for a class to make a singleton out of it """
-    class_instances = {}
-
-    def get_instance(*args, **kwargs):
-        """ creating or just return the one and only class instance.
-            The singleton depends on the parameters used in __init__ """
-        key = (TheClass, args, str(kwargs))
-        if key not in class_instances:
-            class_instances[key] = TheClass(*args, **kwargs)
-        return class_instances[key]
-
-    return get_instance
+from mercury_ml.common.utils import singleton
 
 @singleton
 class S3Singleton:
