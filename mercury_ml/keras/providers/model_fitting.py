@@ -22,23 +22,31 @@ def fit(model, data_bunch, callbacks, batch_size, epochs, class_weight=None, ret
     valid_x = data_bunch.valid.features.underlying
     valid_y = data_bunch.valid.targets.underlying
 
-    history = model.fit(x=train_x,
-                        y=train_y,
-                        validation_data=(valid_x,valid_y),
-                        batch_size=batch_size,
-                        epochs=epochs,
-                        class_weight=class_weight,
-                        callbacks=callbacks
-                        )
 
+    try:
+        model.fit(x=train_x,
+                  y=train_y,
+                  validation_data=(valid_x, valid_y),
+                  batch_size=batch_size,
+                  epochs=epochs,
+                  class_weight=class_weight,
+                  callbacks=callbacks
+                  )
+
+    except KeyboardInterrupt:
+        print("Interrupted by user")
+        pass
 
     if return_best_model:
         # by default Keras returns the model from the last epoch
         from keras.models import load_model
         model = load_model(__get_model_checkpoint(callbacks).filepath,
                            custom_objects=custom_objects)
+        print("return_best_model set to True. Returning best model")
+    else:
+        print("return_best_model set to False. Returning model from last epoch")
 
-    return model, history
+    return model
 
 
 def fit_generator(model, data_bunch, callbacks, epochs, class_weight=None, return_best_model=False,
@@ -63,7 +71,8 @@ def fit_generator(model, data_bunch, callbacks, epochs, class_weight=None, retur
     train_iterator = data_bunch.train.features.underlying
     valid_iterator = data_bunch.valid.features.underlying
 
-    history = model.fit_generator(generator=train_iterator,
+    try:
+        model.fit_generator(generator=train_iterator,
                                   validation_data=valid_iterator,
                                   steps_per_epoch= train_iterator.n // train_iterator.batch_size,
                                   validation_steps= valid_iterator.n // valid_iterator.batch_size,
@@ -72,13 +81,20 @@ def fit_generator(model, data_bunch, callbacks, epochs, class_weight=None, retur
                                   callbacks=callbacks
                                   )
 
+    except KeyboardInterrupt:
+        print("Interrupted by user")
+        pass
+
     if return_best_model:
         # by default Keras returns the model from the last epoch
         from keras.models import load_model
         model = load_model(__get_model_checkpoint(callbacks).filepath,
                            custom_objects=custom_objects)
+        print("return_best_model set to True. Returning best model")
+    else:
+        print("return_best_model set to False. Returning model from last epoch")
 
-    return model, history
+    return model
 
 
 def __get_model_checkpoint(callbacks):
