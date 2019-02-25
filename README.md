@@ -3,7 +3,7 @@
 ![logo](docs/images/logo_07_200x200.jpg)
 
 
-In the ancient Roman mythology, the god Mercury was known as the messenger of the god. Wearing winged shoes and a winged
+In the ancient Roman mythology, the god Mercury was known as the messenger of the gods. Wearing winged shoes and a winged
 hat he zipped between Mount Olympus and the kingdoms of men and saw to it that the will of the gods was known.
 
 We've chosen `mercury-ml` as the name of this package because we see its role as very similar.
@@ -30,7 +30,7 @@ Within these sections there is a further subdivision into three APIs:
 * `containers`: IoC containers over which the desired providers can be fetched.
 * `tasks`: Small predefined chunks of work, mostly stringing together a handful of logical steps to be executed by various providers
 
-You can interact with `ML-Mercury` via any or all of these APIs. They deliver different levels of abstraction depending
+You can interact with `mercury-ml` via any or all of these APIs. They deliver different levels of abstraction depending
 on what you need. You can also easily mix in your own custom providers.
 
 To understand the purpose and function of each individual provider, container and task, please refer to the `mercury-ml`
@@ -57,7 +57,7 @@ be determined by which functions are used. The core dependencies have been minim
 
 ##### Workflows using H2O Sparkling:
 * `pyspark`
-* `h2o-pysparkling`
+* `h2o-pysparkling-{spark-version}` (e.g. if you installed `pyspark==2.4`, you should install `h2o-pysparkling-2.4`)
 
 ##### Remote storage dependencies:
 * AWS S3: `boto3`

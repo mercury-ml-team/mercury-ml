@@ -16,7 +16,7 @@ You can report bug under the GitHub issues for this projects. When doing so, ple
 
 ### Requesting a Feature
 
-You can also request new features (or changes to Mercury-ML) by posting GitHub issues. 
+You can also request new features (or changes to `mercury-ml`) by posting GitHub issues. 
 
 1. Provide a clear and detailed explanation of the feature you want and why it's important to add. 
 2. Provide code snippets demonstrating the API you have in mind and illustrating the use cases of your feature. 
@@ -38,5 +38,5 @@ Pull requests can be submiting onto the `develop` branch. To submit a pull reque
 
 ### Write Documentation
 
-The ML-Workflow package could always use more documentation, whether as code examples, as part of the official docs or in docstrings!
+The `mercury-ml` package could always use more documentation, whether as code examples, as part of the official docs or in docstrings!
 
