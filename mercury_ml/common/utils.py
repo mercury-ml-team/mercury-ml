@@ -29,24 +29,23 @@ def recursively_update_config(config, string_formatting_dict):
     > print(config)
     {"filename": "test_12345_hdf5.h5", "save_path": "./results/test"}
 
-    :param dict config: A dictionary to be updated
+    :param iterable config: A dictionary or list to be updated
     :param dict string_formatting_dict: A dictionary containing the information with which "config" is to be formatted
     :return:
     """
 
-    for k, v in config.items():
-        if isinstance(v, dict):
+    for k in _iterate_list_or_dict(config):
+        v = config[k]
+        if isinstance(v, dict) or isinstance(v, list):
             recursively_update_config(v, string_formatting_dict)
-        elif isinstance(v, list):
-            for item in v:
-                if isinstance(item, dict):
-                    recursively_update_config(item, string_formatting_dict)
-                else:
-                    if _key_in_string(item, string_formatting_dict):
-                        config[k] = item.format(**string_formatting_dict)
         else:
             if _key_in_string(v, string_formatting_dict):
                 config[k] = v.format(**string_formatting_dict)
+
+def _iterate_list_or_dict(obj):
+    """Iterates over object if list or dictionary"""
+    return obj if isinstance(obj, dict) else range(len(obj))
+
 
 def _key_in_string(string, string_formatting_dict):
     """Checks which formatting keys are present in a given string"""
