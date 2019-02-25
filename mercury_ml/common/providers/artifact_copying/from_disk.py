@@ -17,19 +17,20 @@ def copy_from_disk_to_disk(source_dir, target_dir, filename, overwrite=False, de
     source_dir = _make_local_path(source_dir)
     target_dir = _make_local_path(target_dir)
 
+    source_path = os.path.join(source_dir, filename)
+    target_path = os.path.join(target_dir, filename)
+
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
 
     if overwrite == False:
-        if os.path.exists(os.path.join(target_dir, filename)):
+        if os.path.exists(target_path):
             pass
             #raise FileExistsError("File already exists, but overwrite was not activated")
         else:
-            shutil.copyfile(os.path.join(source_dir, filename),
-                            os.path.join(target_dir, filename))
+            shutil.copyfile(source_path,target_path)
     else:
-        shutil.copyfile(os.path.join(source_dir, filename),
-                        os.path.join(target_dir, filename))
+        shutil.copyfile(source_path,target_path)
 
     if delete_source == True:
         # check if copy was successfull:
@@ -89,11 +90,14 @@ def copy_from_disk_to_s3(source_dir, target_dir, filename, overwrite=False, dele
         s3 = S3Singleton(**s3_session_params).s3
 
     s3_bucket_name, s3_path = target_dir.split("/", 1)
+    s3_key = s3_path + "/" + filename
 
-    s3.Object(s3_bucket_name, s3_path + "/" + filename).put(Body=open(source_dir + "/" + filename, "rb"))
+    source_path = os.path.join(source_dir, filename)
+    if overwrite or not _s3_key_exists(s3, s3_bucket_name, s3_key):
+        s3.Object(s3_bucket_name, s3_key).put(Body=open(source_path, "rb"))
 
     if delete_source:
-        os.remove(source_dir + "/" + filename)
+        os.remove(source_path)
 
 def copy_from_disk_to_gcs(source_dir, target_dir, filename, overwrite=False, delete_source=False):
     """
@@ -127,3 +131,10 @@ def _make_local_path(path_name):
         path_name = os.path.join(os.getcwd(), path_name)
         path_name = os.path.abspath(path_name)
     return path_name
+
+def _s3_key_exists(s3, s3_bucket, s3_key):
+    content = s3.head_object(Bucket=s3_bucket, Key=s3_key)
+    if content.get('ResponseMetadata', None) is not None:
+        return True
+    else:
+        return False

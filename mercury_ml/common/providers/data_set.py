@@ -3,7 +3,7 @@ class DataSet:
     A class that groups together DataWrappers. A typical DataSets would consist of "full_data", "index" , "features" and "targets" DataWrappers.
     """
 
-    def __init__(self, data_wrappers_dict=None, make_from_full_data=None):
+    def __init__(self, data_wrappers_dict=None):
         if data_wrappers_dict:
             self.add_data_wrappers(data_wrappers_dict)
 

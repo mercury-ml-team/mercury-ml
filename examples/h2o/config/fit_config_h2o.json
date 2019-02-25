@@ -2,9 +2,11 @@
   "meta_info": {
     "ml_engine": "h2o",
     "model_purpose": "test_h2o",
-    "model_id": "{model_id}",
-    "model_object_name": "{model_purpose}__{model_id}",
-    "data_bunch_name": "array_789"
+    "session_id": "{session_id}",
+    "model_object_name": "{model_purpose}__{session_id}",
+    "data_bunch_name": "array_789",
+    "notebook_filepath": "{notebook_filepath}",
+    "config_filepath": "{config_filepath}"
   },
   "init": {
     "initiate_session": {
@@ -152,7 +154,7 @@
     },
     "fit": {
       "params": {
-        "model_id": "{model_id}"
+        "model_id": "{session_id}"
       },
       "pre_execution_transformation": {
         "data_set_names": ["train", "valid", "test"],
@@ -198,8 +200,8 @@
     },
     "save_model": {
       "save_h2o_model": {
-        "local_dir": "./example_results/local/{model_id}/models",
-        "remote_dir": "./example_results/remote/{model_id}/models",
+        "local_dir": "./example_results/local/{session_id}/models",
+        "remote_dir": "./example_results/remote/{session_id}/models",
         "filename": "{model_object_name}__h2o",
         "extension": "",
         "overwrite_remote": true
@@ -263,23 +265,38 @@
     },
     "save_session": {
       "params": {
-        "local_dir": "./example_results/local/{model_id}/session",
-        "remote_dir": "./example_results/remote/{model_id}/session",
-        "filename": "session.json"
+        "local_dir": "./example_results/local/{session_id}/session",
+        "remote_dir": "./example_results/remote/{session_id}/session",
+        "filename": "session"
       }
     },
     "save_session_artifacts": {
-      "params": {
-        "local_dir": {"$ref": "#exec/save_session/params/local_dir"},
-        "remote_dir": {"$ref": "#exec/save_session/params/remote_dir"},
-        "filenames": ["fit.ipynb", "fit_config_h2o.json"]
-      }
+        "artifacts": [
+          {
+            "artifact_path": "{config_filepath}",
+            "local_dir": {
+              "$ref": "#exec/save_session/params/local_dir"
+            },
+            "remote_dir": {
+              "$ref": "#exec/save_session/params/remote_dir"
+            }
+          },
+          {
+            "artifact_path": "{notebook_filepath}",
+            "local_dir": {
+              "$ref": "#exec/save_session/params/local_dir"
+            },
+            "remote_dir": {
+              "$ref": "#exec/save_session/params/remote_dir"
+            }
+          }
+        ]
     },
     "save_formatted_config": {
       "params": {
         "local_dir": {"$ref": "#exec/save_session/params/local_dir"},
         "remote_dir": {"$ref": "#exec/save_session/params/remote_dir"},
-        "filename": "config_formatted.json"
+        "filename": "config_formatted"
       }
     },
     "prepare_predictions_for_storage": {
@@ -302,8 +319,8 @@
         "test": {
           "data_wrapper_name": "predictions_for_storage",
           "params": {
-            "local_dir": "./example_results/local/{model_id}/predictions/test",
-            "remote_dir": "./example_results/remote/{model_id}/predictions/test",
+            "local_dir": "./example_results/local/{session_id}/predictions/test",
+            "remote_dir": "./example_results/remote/{session_id}/predictions/test",
             "filename": "{model_object_name}__test__predictions"
           }
         }
@@ -324,8 +341,8 @@
     "save_metrics": {
       "data_sets": {
         "test": {
-          "local_dir": "./example_results/local/{model_id}/metrics/test",
-          "remote_dir": "./example_results/remote/{model_id}/metrics/test",
+          "local_dir": "./example_results/local/{session_id}/metrics/test",
+          "remote_dir": "./example_results/remote/{session_id}/metrics/test",
           "filename": "{model_object_name}__test__h2o_metrics"
         }
       }
@@ -333,8 +350,8 @@
     "save_threshold_metrics": {
       "data_sets": {
         "test": {
-          "local_dir": "./example_results/local/{model_purpose}/{model_id}/data_bunches/{data_bunch_name}/test/metrics",
-          "remote_dir": "./example_results/remote/{model_purpose}/{model_id}/data_bunches/{data_bunch_name}/test/metrics",
+          "local_dir": "./example_results/local/{model_purpose}/{session_id}/data_bunches/{data_bunch_name}/test/metrics",
+          "remote_dir": "./example_results/remote/{model_purpose}/{session_id}/data_bunches/{data_bunch_name}/test/metrics",
           "filename": "{model_object_name}__test__h2o_threshold_metrics"
         }
       }

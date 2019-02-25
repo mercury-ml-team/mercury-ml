@@ -8,9 +8,11 @@
   "meta_info": {
     "ml_engine": "keras (tensorflow)",
     "model_purpose": "test_array",
-    "model_id": "{model_id}",
-    "model_object_name": "{model_purpose}__{model_id}",
-    "data_bunch_name": "array_123"
+    "session_id": "{session_id}",
+    "model_object_name": "{model_purpose}__{session_id}",
+    "data_bunch_name": "array_123",
+    "notebook_filepath": "{notebook_filepath}",
+    "config_filepath": "{config_filepath}"
   },
   "init": {
     "read_source_data": {
@@ -33,7 +35,7 @@
     },
     "save_model": {
       "names": [
-        "save_hdf5"
+        "save_hdf5", "save_tensorflow_serving_predict_signature_def"
       ]
     },
     "copy_from_local_to_remote": {
@@ -46,7 +48,7 @@
       {
         "name": "early_stopping",
         "params": {
-          "patience": 2,
+          "patience": 5,
           "monitor": "val_loss",
           "min_delta": 0.001
         }
@@ -54,7 +56,7 @@
       {
         "name": "model_checkpoint",
         "params": {
-          "filepath": "./example_results/local/{model_id}/model_checkpoint/last_best_model.save_hdf5",
+          "filepath": "./example_results/local/{session_id}/model_checkpoint/last_best_model.h5",
           "save_best_only": true
         }
       }
@@ -164,7 +166,7 @@
     "fit": {
       "params": {
         "batch_size": {"$ref": "#global_references/batch_size"},
-        "epochs": 1
+        "epochs": 10
       },
       "pre_execution_transformation": {
         "data_set_names": ["train", "valid", "test"],
@@ -190,11 +192,23 @@
     },
     "save_model": {
       "save_hdf5": {
-        "local_dir": "./example_results/local/{model_id}/models",
-        "remote_dir": "./example_results/remote/{model_id}/models",
+        "local_dir": "./example_results/local/{session_id}/models",
+        "remote_dir": "./example_results/remote/{session_id}/models",
         "filename": "{model_object_name}__hdf5",
         "extension": ".h5",
         "overwrite_remote": true
+      },
+      "save_tensorflow_serving_predict_signature_def": {
+        "local_dir": {"$ref": "#exec/save_model/save_hdf5/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_model/save_hdf5/remote_dir"},
+        "filename": "{model_object_name}__tf_serving_predict",
+        "temp_base_dir": "c:/tf_serving/_tmp_model/{model_object_name}__tf_serving_predict",
+        "extension": ".zip",
+        "overwrite_remote": true,
+        "do_save_labels_txt": true,
+        "input_name": "input",
+        "output_name": "output",
+        "labels_list": ["cat", "dog"]
       }
     },
     "evaluate_custom_metrics": {
@@ -220,23 +234,38 @@
     },
     "save_session": {
       "params": {
-        "local_dir": "./example_results/local/{model_id}/session",
-        "remote_dir": "./example_results/remote/{model_id}/session",
-        "filename": "session.json"
+        "local_dir": "./example_results/local/{session_id}/session",
+        "remote_dir": "./example_results/remote/{session_id}/session",
+        "filename": "session"
       }
     },
     "save_session_artifacts": {
-      "params": {
-        "local_dir": {"$ref": "#exec/save_session/params/local_dir"},
-        "remote_dir": {"$ref": "#exec/save_session/params/remote_dir"},
-        "filenames": ["fit.ipynb", "fit_config_array.json"]
-      }
+        "artifacts": [
+          {
+            "artifact_path": "{config_filepath}",
+            "local_dir": {
+              "$ref": "#exec/save_session/params/local_dir"
+            },
+            "remote_dir": {
+              "$ref": "#exec/save_session/params/remote_dir"
+            }
+          },
+          {
+            "artifact_path": "{notebook_filepath}",
+            "local_dir": {
+              "$ref": "#exec/save_session/params/local_dir"
+            },
+            "remote_dir": {
+              "$ref": "#exec/save_session/params/remote_dir"
+            }
+          }
+        ]
     },
     "save_formatted_config": {
       "params": {
         "local_dir": {"$ref": "#exec/save_session/params/local_dir"},
         "remote_dir": {"$ref": "#exec/save_session/params/remote_dir"},
-        "filename": "config_formatted.json"
+        "filename": "config_formatted"
       }
     },
     "prepare_predictions_for_storage": {
@@ -270,8 +299,8 @@
         "test": {
           "data_wrapper_name": "predictions_for_storage",
           "params": {
-            "local_dir": "./example_results/local/{model_id}/predictions/test",
-            "remote_dir": "./example_results/remote/{model_id}/predictions/test",
+            "local_dir": "./example_results/local/{session_id}/predictions/test",
+            "remote_dir": "./example_results/remote/{session_id}/predictions/test",
             "filename": "{model_object_name}__test__predictions"
           }
         }
@@ -292,8 +321,8 @@
     "save_metrics": {
       "data_sets": {
         "test": {
-          "local_dir": "./example_results/local/{model_id}/metrics/test",
-          "remote_dir": "./example_results/remote/{model_id}/metrics/test",
+          "local_dir": "./example_results/local/{session_id}/metrics/test",
+          "remote_dir": "./example_results/remote/{session_id}/metrics/test",
           "filename": "{model_object_name}__test__keras_metrics"
         }
       }
