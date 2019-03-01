@@ -32,16 +32,12 @@ def store_dict_on_mongo(data, document_id, database_name, collection_name, mongo
     mongo_db = getattr(mongo_client, database_name)
     mongo_collection = getattr(mongo_db, collection_name)
 
-    wrapped_data = _make_wrapped_dictionary(document_key=document_key,
-                                            document_key_separator=document_key_separator,
-                                            data=data)
-
-
+    document_key = document_key.replace(document_key_separator, ".")
 
     if overwrite or not _document_exists(mongo_collection, document_id):
         mongo_collection.update_one(
             {"_id": document_id},
-            {"$set": wrapped_data},
+            {"$set": {document_key: data}},
             upsert=True
         )
     else:
@@ -55,15 +51,3 @@ def _document_exists(mongo_collection, document_id):
         return True
     else:
         return False
-
-def _make_wrapped_dictionary(document_key, data, document_key_separator="/"):
-    if not document_key or document_key == "":
-        return data
-    else:
-        split_keys = document_key.split(document_key_separator)
-
-        wrapped_data = data
-        for key in reversed(split_keys):
-            wrapped_data = {key: wrapped_data}
-
-        return wrapped_data
