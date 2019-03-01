@@ -29,6 +29,9 @@ def copy_from_s3_to_disk(source_dir, target_dir, filename, overwrite=False, dele
             from mercury_ml.common.providers.artifact_copying import S3Singleton
             s3 = S3Singleton(**s3_session_params).s3
 
+        if not os.path.isdir(target_dir):
+            os.makedirs(target_dir)
+
         s3_bucket_name, s3_path = source_dir.split("/", 1)
 
         s3.meta.client.download_file(s3_bucket_name,
