@@ -205,7 +205,7 @@ store_model(save_model=save_model,
             model=model,
             filename=filename,
             local_dir=local_dir,
-            remote_dir=local_dir,
+            remote_dir=remote_dir,
             extension=extension
             )
 ```
