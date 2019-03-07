@@ -164,7 +164,7 @@ from mercury_ml.common.containers import ArtifactCopiers
 import os
 
 config = {
-    "save_model": "hdf5",
+    "save_model": "save_hdf5",
     "copy_model": "copy_from_disk_to_s3"
 }
 
