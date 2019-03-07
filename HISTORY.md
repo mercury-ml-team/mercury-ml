@@ -1,5 +1,10 @@
 # History
 
+## 0.1.3
+- MongoDBSingleton now only imports pymongo from within the __init__ scope
+- saving artifacts to MongoDB will now correctly update only the lowest level the the document_key provided)
+- copying from s3 to disk will now automatically create the local directory to be downloaded to
+
 ## 0.1.2
 - It is now possible to store dictionary artifacts to MongoDB
 
