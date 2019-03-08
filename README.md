@@ -154,8 +154,8 @@ from_disk.copy_from_disk_to_s3(source_dir=local_dir,
 
 Using the `containers` API makes the most sense when you want to steer your workflow via a configuration file. The containers
 are just light-weight classes that allow you to access various similar providers from a single location. For example,
-the function used above, `model_saving.save_keras_hdf5` can be accessed via a container as `ModelSavers.hdf5`. Using the
-`getattr` function this can also be accessed as `getattr(ArtifactCopiers, "hdf5")` allowing us to easily parameterize
+the function used above, `model_saving.save_keras_hdf5` can be accessed via a container as `ModelSavers.save_hdf5`. Using the
+`getattr` function this can also be accessed as `getattr(ArtifactCopiers, "save_hdf5")` allowing us to easily parameterize
 this in a config.
 
 ```python
