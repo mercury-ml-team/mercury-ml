@@ -1,5 +1,4 @@
-def fit(model, data_bunch, callbacks, batch_size, epochs, class_weight=None, return_best_model=False,
-        custom_objects=None):
+def fit(model, data_bunch, callbacks, return_best_model=False, **kwargs):
 
     """
     Fits a Keras model when using arrays as inputs
@@ -27,10 +26,8 @@ def fit(model, data_bunch, callbacks, batch_size, epochs, class_weight=None, ret
         model.fit(x=train_x,
                   y=train_y,
                   validation_data=(valid_x, valid_y),
-                  batch_size=batch_size,
-                  epochs=epochs,
-                  class_weight=class_weight,
-                  callbacks=callbacks
+                  callbacks=callbacks,
+                  **kwargs
                   )
 
     except KeyboardInterrupt:
@@ -39,8 +36,15 @@ def fit(model, data_bunch, callbacks, batch_size, epochs, class_weight=None, ret
 
     if return_best_model:
         # by default Keras returns the model from the last epoch
-        model.load_weights(__get_model_checkpoint(callbacks).filepath)
         print("return_best_model set to True. Returning best model")
+        try:
+            model.load_weights(__get_model_checkpoint(callbacks).filepath)
+        except Exception as e:
+            import traceback
+            print("Unable to reload model weights. Returning model from last epoch. Did you remember to define a ModelCheckpointProvider callback?")
+            print("Error type:", type(e).__name__)
+            print("Stack trace:", str(traceback.format_exc()).replace("'", "''"))
+
     else:
         print("return_best_model set to False. Returning model from last epoch")
 
@@ -48,8 +52,7 @@ def fit(model, data_bunch, callbacks, batch_size, epochs, class_weight=None, ret
     return model
 
 
-def fit_generator(model, data_bunch, callbacks, epochs, class_weight=None, return_best_model=False,
-        custom_objects=None):
+def fit_generator(model, data_bunch, callbacks, return_best_model=False, **kwargs):
 
     """
     Fits a Keras model when using generators as input
@@ -72,13 +75,11 @@ def fit_generator(model, data_bunch, callbacks, epochs, class_weight=None, retur
 
     try:
         model.fit_generator(generator=train_iterator,
-                                  validation_data=valid_iterator,
-                                  steps_per_epoch= train_iterator.n // train_iterator.batch_size,
-                                  validation_steps= valid_iterator.n // valid_iterator.batch_size,
-                                  epochs=epochs,
-                                  class_weight=class_weight,
-                                  callbacks=callbacks
-                                  )
+                            validation_data=valid_iterator,
+                            steps_per_epoch=train_iterator.n // train_iterator.batch_size,
+                            validation_steps=valid_iterator.n // valid_iterator.batch_size,
+                            callbacks=callbacks,
+                            **kwargs)
 
     except KeyboardInterrupt:
         print("Interrupted by user")
@@ -86,8 +87,15 @@ def fit_generator(model, data_bunch, callbacks, epochs, class_weight=None, retur
 
     if return_best_model:
         # by default Keras returns the model from the last epoch
-        model.load_weights(__get_model_checkpoint(callbacks).filepath)
         print("return_best_model set to True. Returning best model")
+        try:
+            model.load_weights(__get_model_checkpoint(callbacks).filepath)
+        except Exception as e:
+            import traceback
+            print("Unable to reload model weights. Returning model from last epoch. Did you remember to define a ModelCheckpointProvider callback?")
+            print("Error type:", type(e).__name__)
+            print("Stack trace:", str(traceback.format_exc()).replace("'", "''"))
+
     else:
         print("return_best_model set to False. Returning model from last epoch")
 
