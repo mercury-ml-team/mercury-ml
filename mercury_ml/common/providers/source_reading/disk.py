@@ -20,12 +20,6 @@ def read_pandas_data_set(path, input_format, full_data_columns, index_columns, f
     :return: DataSet consiting of PandasDataWrappers
     """
 
-    if input_format == ".csv":
-        df = pd.read_csv(path, usecols=full_data_columns)
-    else:
-        raise NotImplementedError("input_format '{}' not implemented yet")
-
-
     if input_format == ".pkl":
         df = pd.read_pickle(path)[full_data_columns]
     elif input_format == ".csv":
