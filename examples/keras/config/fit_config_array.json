@@ -57,7 +57,8 @@
         "name": "model_checkpoint",
         "params": {
           "filepath": "./example_results/local/{session_id}/model_checkpoint/last_best_model.h5",
-          "save_best_only": true
+          "save_best_only": true,
+          "save_weights_only": true
         }
       }
     ],
@@ -166,7 +167,8 @@
     "fit": {
       "params": {
         "batch_size": {"$ref": "#global_references/batch_size"},
-        "epochs": 10
+        "epochs": 10,
+        "return_best_model": true
       },
       "pre_execution_transformation": {
         "data_set_names": ["train", "valid", "test"],

@@ -58,7 +58,8 @@
         "name": "model_checkpoint",
         "params": {
           "filepath": "./example_results/local/{session_id}/model_checkpoint/last_best_model.h5",
-          "save_best_only": true
+          "save_best_only": true,
+          "save_weights_only": true
         }
       }
     ],
@@ -198,6 +199,7 @@
     },
     "fit": {
       "params": {
+        "return_best_model": true,
         "epochs": 5
       }
     },
