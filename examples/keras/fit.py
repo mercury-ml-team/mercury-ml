@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.3'
-#       jupytext_version: 1.0.2
+#       jupytext_version: 1.0.3
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -21,7 +21,7 @@
 import sys
 import os
 sys.path.append(os.path.split(os.path.split(os.getcwd())[0])[0])
-config_filepath = os.path.join(os.getcwd(),"config/fit_config_array.json")
+config_filepath = os.path.join(os.getcwd(),"config/fit_config_generator.json")
 notebook_filepath = os.path.join(os.getcwd(),"fit.ipynb")
 import uuid
 import json
@@ -139,15 +139,15 @@ print(json.dumps(session, indent=2))
 #
 # ```python
 # # 1. (what we are using in this notebook)
-# from ml_workflow.common import containers as common_containers
+# from mercury_ml.common import containers as common_containers
 # source_reader=getattr(common_containers.SourceReaders, "read_pandas_data_set")
 #
 # # 2. 
-# from ml_workflow.common import containers as common_containers
+# from mercury_ml.common import containers as common_containers
 # source_reader=common_containers.SourceReaders.read_pandas_data_set
 #
 # # 3.
-# from ml_workflow.common.providers.source_reading import read_pandas_data_set
+# from mercury_ml.common.providers.source_reading import read_pandas_data_set
 # source_reader=read_pandas_data_set
 # ```
 #
