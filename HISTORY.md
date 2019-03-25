@@ -1,5 +1,10 @@
 # History
 
+## 0.1.4
+- Under `mercury_ml.keras.providers.model_fitting` bot `fit` and `fit_generator` now:
+  1. Accept `**kwargs` to be passed to the underlying Keras functions
+  2. If `save_best_model=True` will only reload model weights (instead of importing an entire model as was done before). This keeps model training history intact
+
 ## 0.1.3
 - MongoDBSingleton now only imports pymongo from within the __init__ scope
 - saving artifacts to MongoDB will now correctly update only the lowest level the the document_key provided)
