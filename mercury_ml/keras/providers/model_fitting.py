@@ -39,12 +39,11 @@ def fit(model, data_bunch, callbacks, batch_size, epochs, class_weight=None, ret
 
     if return_best_model:
         # by default Keras returns the model from the last epoch
-        from keras.models import load_model
-        model = load_model(__get_model_checkpoint(callbacks).filepath,
-                           custom_objects=custom_objects)
+        model.load_weights(__get_model_checkpoint(callbacks).filepath)
         print("return_best_model set to True. Returning best model")
     else:
         print("return_best_model set to False. Returning model from last epoch")
+
 
     return model
 
@@ -87,12 +86,11 @@ def fit_generator(model, data_bunch, callbacks, epochs, class_weight=None, retur
 
     if return_best_model:
         # by default Keras returns the model from the last epoch
-        from keras.models import load_model
-        model = load_model(__get_model_checkpoint(callbacks).filepath,
-                           custom_objects=custom_objects)
+        model.load_weights(__get_model_checkpoint(callbacks).filepath)
         print("return_best_model set to True. Returning best model")
     else:
         print("return_best_model set to False. Returning model from last epoch")
+
 
     return model
 
