@@ -1,4 +1,4 @@
-def evaluate(model, data_set):
+def evaluate(model, data_set, **kwargs):
     """
     Fetches the built-in Keras metrics, when using an array as input
     :param model: A trainied Keras model
@@ -6,12 +6,12 @@ def evaluate(model, data_set):
     :return: A dictionary of the form {metric_name:metric_value,...}
     """
 
-    metric_values = model.evaluate(x=data_set.features.underlying, y=data_set.targets.underlying)
+    metric_values = model.evaluate(x=data_set.features.underlying, y=data_set.targets.underlying, **kwargs)
     metrics = __generate_metric_dict(model.metrics_names, metric_values)
 
     return metrics
 
-def evaluate_generator(model, data_set):
+def evaluate_generator(model, data_set, **kwargs):
     """
     Fetches the built-in Keras metrics, when using an generator as input
     :param model: A trainied Keras model
@@ -20,7 +20,7 @@ def evaluate_generator(model, data_set):
     """
 
     iterator = data_set.features.underlying
-    metric_values = model.evaluate_generator(iterator)
+    metric_values = model.evaluate_generator(iterator, **kwargs)
     metrics = __generate_metric_dict(model.metrics_names, metric_values)
 
     return metrics
