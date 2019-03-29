@@ -1,5 +1,6 @@
 import os
 import json
+import json_tricks
 
 def store_h2o_frame(data, directory, filename, force=False, parts=1):
     """
@@ -89,7 +90,7 @@ def store_pandas_json(data, directory, filename, orient="table", compression=Non
     return filepath
 
 
-def store_dict_json(data, directory, filename):
+def store_dict_json(data, directory, filename, convert_to_primitives=True):
     """
     Saves data to Disk as JSON file.
 
@@ -104,7 +105,11 @@ def store_dict_json(data, directory, filename):
 
     filepath = os.path.join(directory, filename + ".json")
     with open(filepath, "w") as f:
-        json.dump(data, f, indent=2)
+        if convert_to_primitives:
+            json_tricks.dump(data, f, indent=2)
+        else:
+            json.dump(data, f, indent=2)
+
 
     return filepath
 

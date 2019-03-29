@@ -1,5 +1,5 @@
-from keras.layers import Dense
-from keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import Sequential
 
 def define_model(dense_activation, final_activation, nb_classes, nb_features, seed=1234):
     """

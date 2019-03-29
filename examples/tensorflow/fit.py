@@ -13,7 +13,7 @@
 #     name: python3
 # ---
 
-# # Keras workflow
+# # Tensorflow workflow
 
 # ## Imports
 
@@ -25,13 +25,14 @@ config_filepath = os.path.join(os.getcwd(),"config/fit_config_generator.json")
 notebook_filepath = os.path.join(os.getcwd(),"fit.ipynb")
 import uuid
 import json
+import json_tricks
 import datetime
 import getpass
 
 from mercury_ml.common import tasks
 from mercury_ml.common import utils
 from mercury_ml.common import containers as common_containers
-from mercury_ml.keras import containers as keras_containers
+from mercury_ml.tensorflow import containers as keras_containers
 
 # ## Helpers
 #
@@ -53,7 +54,7 @@ def maybe_transform(data_bunch, pre_execution_parameters):
         return data_bunch
         
 def print_dict(d):
-    print(json.dumps(d, indent=2))
+    print(json_tricks.dumps(d, indent=2))
 
 def get_installed_packages():
     import pip
@@ -69,6 +70,7 @@ def get_installed_packages():
     return packages
 
 
+
 # -
 
 # ## Config
@@ -81,7 +83,7 @@ print_dict(config)
 
 # #### Set model_id
 
-session_id = str(uuid.uuid4().hex)
+session_id = str(uuid.uuid4().hex)[:8]
 
 print(session_id)
 
@@ -203,41 +205,41 @@ custom_label_metrics_dict = {
 
 # ### Keras
 
-# a function that returns an uncompiled keras model
+# a function that returns an uncompiled tensorflow model
 define_model = get_and_log(keras_containers.ModelDefinitions, 
                            config["init"]["define_model"]["name"])
 
-# a function that returns a keras loss function
+# a function that returns a tensorflow loss function
 get_loss_function = get_and_log(keras_containers.LossFunctionFetchers, 
                                 config["init"]["get_loss_function"]["name"])
 
-# a function that returns a keras optimizer
+# a function that returns a tensorflow optimizer
 get_optimizer = get_and_log(keras_containers.OptimizerFetchers, 
                            config["init"]["get_optimizer"]["name"])
 
 
-# a function that returns a compiled keras model
+# a function that returns a compiled tensorflow model
 compile_model = get_and_log(keras_containers.ModelCompilers, 
                             config["init"]["compile_model"]["name"])
 
-# a function that fits a compiled keras model
+# a function that fits a compiled tensorflow model
 fit = get_and_log(keras_containers.ModelFitters, config["init"]["fit"]["name"])
 
-# a list of functions that serve as callback when fitting a keras model
+# a list of functions that serve as callback when fitting a tensorflow model
 callbacks = []
 for callback in config["init"]["callbacks"]:
     callbacks = callbacks + [get_and_log(keras_containers.CallBacks, callback["name"])(callback["params"])]
 
-# a function for evaluating keras metrics
+# a function for evaluating tensorflow metrics
 evaluate = get_and_log(keras_containers.ModelEvaluators, config["init"]["evaluate"]["name"])
 
-# a dictionary of functions that save keras models in various formats
+# a dictionary of functions that save tensorflow models in various formats
 save_model_dict = {
     save_model_function_name: get_and_log(keras_containers.ModelSavers, save_model_function_name) for save_model_function_name in config["init"]["save_model"]["names"]
 }
 
 
-# a function that predictions using a keras model
+# a function that predictions using a tensorflow model
 predict = get_and_log(keras_containers.PredictionFunctions, config["init"]["predict"]["name"])
 
 # ## Execution

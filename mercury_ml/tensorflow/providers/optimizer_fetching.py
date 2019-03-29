@@ -7,6 +7,8 @@ def get_keras_optimizer(optimizer_name, optimizer_params):
     :return:
     """
 
-    from keras import optimizers
+    from tensorflow.keras import optimizers
 
     return getattr(optimizers, optimizer_name)(**optimizer_params)
+
+

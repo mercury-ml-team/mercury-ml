@@ -1,6 +1,6 @@
-from keras.initializers import glorot_normal
-from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Dropout
-from keras.models import Sequential
+from tensorflow.keras.initializers import glorot_normal
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Dropout
+from tensorflow.keras.models import Sequential
 
 def define_model(input_size, dropout_rate, final_activation, nb_classes, seed=1234):
     """

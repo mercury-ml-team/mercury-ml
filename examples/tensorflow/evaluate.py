@@ -36,7 +36,7 @@ import os
 from mercury_ml.common import utils
 from mercury_ml.common import tasks
 from mercury_ml.common import containers as common_containers
-from mercury_ml.keras import containers as keras_containers
+from mercury_ml.tensorflow import containers as keras_containers
 
 
 # -
@@ -213,17 +213,17 @@ custom_label_metrics_dict = {
 
 # ### Keras
 
-# a function that returns a keras loss function
+# a function that returns a tensorflow loss function
 get_loss_function = get_and_log(keras_containers.LossFunctionFetchers, 
                                 config["init"]["get_loss_function"]["name"])
 
 # a function that loads a Keras model
 load_model = get_and_log(keras_containers.ModelLoaders, config["init"]["load_model"]["name"])
 
-# a function for evaluating keras metrics
+# a function for evaluating tensorflow metrics
 evaluate = get_and_log(keras_containers.ModelEvaluators, config["init"]["evaluate"]["name"])
 
-# a function that predictions using a keras model
+# a function that predictions using a tensorflow model
 predict = get_and_log(keras_containers.PredictionFunctions, config["init"]["predict"]["name"])
 
 # ## Execution

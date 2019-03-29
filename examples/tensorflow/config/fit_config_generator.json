@@ -1,25 +1,25 @@
 {
   "global_references":
   {
-    "number_of_classes": 3,
+    "number_of_classes": 2,
     "batch_size": 2,
-    "labels": [0, 1, 2]
+    "labels": ["cat", "dog"]
   },
   "meta_info": {
     "ml_engine": "keras (tensorflow)",
-    "model_purpose": "test_array",
+    "model_purpose": "test_generator",
     "session_id": "{session_id}",
     "model_object_name": "{model_purpose}__{session_id}",
-    "data_bunch_name": "array_123",
+    "data_bunch_name": "images_456",
     "notebook_filepath": "{notebook_filepath}",
     "config_filepath": "{config_filepath}"
   },
   "init": {
     "read_source_data": {
-      "name": "read_disk_pandas"
+      "name": "read_disk_keras_single_input_iterator"
     },
     "define_model": {
-      "name": "define_mlp_simple"
+      "name": "define_conv_simple"
     },
     "get_optimizer": {
       "name": "get_keras_optimizer"
@@ -31,24 +31,25 @@
       "name": "compile_model"
     },
     "fit": {
-      "name": "fit"
+      "name": "fit_generator"
     },
     "save_model": {
       "names": [
-        "save_hdf5", "save_tensorflow_serving_predict_signature_def"
+        "save_hdf5", "save_tensorflow_saved_model_archived"
       ]
     },
     "copy_from_local_to_remote": {
-      "name": "copy_from_disk_to_disk"
+      "name": "copy_from_disk_to_disk",
+      "params": {}
     },
     "evaluate": {
-      "name": "evaluate"
+      "name": "evaluate_generator"
     },
     "callbacks": [
       {
         "name": "early_stopping",
         "params": {
-          "patience": 5,
+          "patience": 2,
           "monitor": "val_loss",
           "min_delta": 0.001
         }
@@ -63,7 +64,7 @@
       }
     ],
     "predict": {
-      "name": "predict"
+      "name": "predict_generator"
     },
     "custom_metrics": {
       "names": [
@@ -80,6 +81,7 @@
     "store_prediction_artifact_locally": {
       "name": "store_pandas_pickle"
     },
+
     "store_artifact_locally":
     {
       "name": "store_dict_json"
@@ -89,62 +91,93 @@
     "read_source_data": {
       "params": {
         "train_params": {
-          "path": "./example_data/{data_bunch_name}/train.csv",
-          "input_format": ".csv",
-          "full_data_columns": [
-            "ID",
-            "ID2",
-            "field1_num",
-            "field2_num",
-            "field3_num",
-            "field4_target",
-            "field5_target",
-            "field6_target"
-          ],
-          "index_columns": [
-            "ID",
-            "ID2"
-          ],
-          "features_columns": [
-            "field1_num",
-            "field2_num",
-            "field3_num"
-          ],
-          "targets_columns": [
-            "field4_target",
-            "field5_target",
-            "field6_target"
-          ]
+          "generator_params": {
+            "channel_shift_range": 0.0,
+            "data_format": "channels_last",
+            "featurewise_center": false,
+            "featurewise_std_normalization": false,
+            "fill_mode": "nearest",
+            "height_shift_range": 0.1,
+            "horizontal_flip": true,
+            "rescale": 0.00392156862745098,
+            "rotation_range": 0.2,
+            "samplewise_center": true,
+            "samplewise_std_normalization": true,
+            "shear_range": 0.1,
+            "vertical_flip": true,
+            "width_shift_range": 0.1,
+            "zca_epsilon": 1e-6,
+            "zca_whitening": false,
+            "zoom_range": 0.1
+          },
+          "iterator_params": {
+            "directory": "./example_data/{data_bunch_name}/train",
+            "batch_size": {"$ref": "#global_references/batch_size"},
+            "class_mode": "categorical",
+            "color_mode": "rgb",
+            "seed": 12345,
+            "shuffle": true,
+            "target_size": [
+              10,
+              10
+            ]
+          }
         },
         "valid_params": {
-          "path": "./example_data/{data_bunch_name}/valid.csv",
-          "input_format": {"$ref": "#exec/read_source_data/params/train_params/input_format"},
-          "full_data_columns": {"$ref": "#exec/read_source_data/params/train_params/full_data_columns"},
-          "index_columns": {"$ref": "#exec/read_source_data/params/train_params/index_columns"},
-          "features_columns": {"$ref": "#exec/read_source_data/params/train_params/features_columns"},
-          "targets_columns": {"$ref": "#exec/read_source_data/params/train_params/targets_columns"}
+          "generator_params": {
+            "channel_shift_range": 0.0,
+            "data_format": "channels_last",
+            "featurewise_center": false,
+            "featurewise_std_normalization": false,
+            "fill_mode": "nearest",
+            "height_shift_range": 0.1,
+            "horizontal_flip": true,
+            "rescale": 0.00392156862745098,
+            "rotation_range": 0.2,
+            "samplewise_center": true,
+            "samplewise_std_normalization": true,
+            "shear_range": 0.1,
+            "vertical_flip": true,
+            "width_shift_range": 0.1,
+            "zca_epsilon": 1e-6,
+            "zca_whitening": false,
+            "zoom_range": 0.1
+          },
+          "iterator_params": {
+            "directory": "./example_data/{data_bunch_name}/valid",
+            "batch_size": {"$ref": "#exec/read_source_data/params/train_params/iterator_params/batch_size"},
+            "class_mode": {"$ref": "#exec/read_source_data/params/train_params/iterator_params/class_mode"},
+            "color_mode": {"$ref": "#exec/read_source_data/params/train_params/iterator_params/color_mode"},
+            "seed": {"$ref": "#exec/read_source_data/params/train_params/iterator_params/batch_size"},
+            "shuffle": false,
+            "target_size": {"$ref": "#exec/read_source_data/params/train_params/iterator_params/target_size"}
+          }
         },
         "test_params": {
-          "path": "./example_data/{data_bunch_name}/test.csv",
-          "input_format": {"$ref": "#exec/read_source_data/params/train_params/input_format"},
-          "full_data_columns": {"$ref": "#exec/read_source_data/params/train_params/full_data_columns"},
-          "index_columns": {"$ref": "#exec/read_source_data/params/train_params/index_columns"},
-          "features_columns": {"$ref": "#exec/read_source_data/params/train_params/features_columns"},
-          "targets_columns": {"$ref": "#exec/read_source_data/params/train_params/targets_columns"}
+          "generator_params": {"$ref": "#exec/read_source_data/params/valid_params/generator_params"},
+          "iterator_params": {
+            "directory": "./example_data/{data_bunch_name}/test",
+            "batch_size": {"$ref": "#exec/read_source_data/params/train_params/iterator_params/batch_size"},
+            "class_mode": {"$ref": "#exec/read_source_data/params/train_params/iterator_params/class_mode"},
+            "color_mode": {"$ref": "#exec/read_source_data/params/train_params/iterator_params/color_mode"},
+            "seed": {"$ref": "#exec/read_source_data/params/train_params/iterator_params/batch_size"},
+            "shuffle": false,
+            "target_size": {"$ref": "#exec/read_source_data/params/train_params/iterator_params/target_size"}
+          }
         }
       }
     },
     "define_model": {
       "params": {
-       "nb_classes": {"$ref": "#global_references/number_of_classes"},
-       "nb_features": 3,
-       "dense_activation": "relu",
-       "final_activation": "softmax"
+        "nb_classes": {"$ref": "#global_references/number_of_classes"},
+        "input_size": [10,10],
+        "final_activation": "softmax",
+        "dropout_rate": 0.1
       }
     },
     "get_optimizer": {
       "params": {
-        "optimizer_name": "adam",
+        "optimizer_name": "Adam",
         "optimizer_params": {
           "lr": 0.0001
         }
@@ -166,18 +199,8 @@
     },
     "fit": {
       "params": {
-        "batch_size": {"$ref": "#global_references/batch_size"},
-        "epochs": 10,
-        "return_best_model": true
-      },
-      "pre_execution_transformation": {
-        "data_set_names": ["train", "valid", "test"],
-        "transform_then_slice": true,
-        "params": {
-          "transform_to": "numpy",
-          "full_data_wrapper_params": {},
-          "data_wrapper_names": ["features", "targets", "index"]
-        }
+        "return_best_model": true,
+        "epochs": 5
       }
     },
     "evaluate": {
@@ -200,16 +223,13 @@
         "extension": ".h5",
         "overwrite_remote": true
       },
-      "save_tensorflow_serving_predict_signature_def": {
+      "save_tensorflow_saved_model_archived": {
         "local_dir": {"$ref": "#exec/save_model/save_hdf5/local_dir"},
         "remote_dir": {"$ref": "#exec/save_model/save_hdf5/remote_dir"},
         "filename": "{model_object_name}__tf_serving_predict",
         "temp_base_dir": "c:/tf_serving/_tmp_model/{model_object_name}__tf_serving_predict",
         "extension": ".zip",
         "overwrite_remote": true,
-        "do_save_labels_txt": true,
-        "input_name": "input",
-        "output_name": "output",
         "labels_list": ["cat", "dog"]
       }
     },
@@ -229,9 +249,7 @@
       "params": {}
     },
     "evaluate_custom_label_metrics": {
-      "data_set_names": [
-        "test"
-      ],
+      "data_set_names": ["test"],
       "params": {}
     },
     "save_session": {

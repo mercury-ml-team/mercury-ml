@@ -2,7 +2,7 @@
 ImageGenerator and DirectoryIterator classes used for models with multiple inputs
 """
 
-from keras.preprocessing.image import ImageDataGenerator, DirectoryIterator
+from tensorflow.keras.preprocessing.image import ImageDataGenerator, DirectoryIterator
 import pandas as pd
 
 

@@ -1,12 +1,12 @@
 def get_keras_loss(loss_name):
     """
-    Fetches built in keras losses
+    Fetches built in tensorflow losses
 
     :param loss_name: The name of the loss to fetch
     :return: A vanilla Keras loss function
     """
 
-    from keras import losses
+    from tensorflow.keras import losses
 
     return getattr(losses, loss_name)
 
@@ -21,6 +21,6 @@ def get_custom_loss(loss_function_getter_name, loss_function_getter_params):
     :return: A vanilla Keras loss function
     """
 
-    from mercury_ml.keras.providers import custom_loss_functions
+    from mercury_ml.tensorflow.providers import custom_loss_functions
 
     return getattr(custom_loss_functions, loss_function_getter_name)(**loss_function_getter_params)

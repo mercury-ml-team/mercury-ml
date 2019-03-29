@@ -1,11 +1,11 @@
 """ImageGenerator and DirectoryIterator classes used for models with multiple (attribute-type) labels"""
 
-from keras.preprocessing.image import ImageDataGenerator, DirectoryIterator
+from tensorflow.keras.preprocessing.image import ImageDataGenerator, DirectoryIterator
 import os
 import numpy as np
 import pandas as pd
-from keras import backend as K
-from keras.preprocessing.image import load_img, img_to_array, array_to_img
+from tensorflow.keras import backend as K
+from tensorflow.keras.preprocessing.image import load_img, img_to_array, array_to_img
 
 
 class MultiLabelImageDataGenerator(ImageDataGenerator):

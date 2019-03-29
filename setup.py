@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 setup(name="mercury-ml",
-      version="0.1.4",
+      version="0.2.0",
       description="A library for managing Machine Learning workflows",
       url="https://github.com/mercury-ml-team/mercury-ml",
       author="Karl Schriek",
@@ -12,8 +12,8 @@ setup(name="mercury-ml",
       include_package_data=True,
       install_requires=["numpy", "pandas", "sklearn", "jsonref"],
       extras_require={
-            "keras": ["tensorflow", "keras", "pillow"],
-            "keras-gpu": ["tensorflow-gpu", "keras", "pillow"],
+            "tensorflow": ["tensorflow", "pillow"],
+            "tensorflow-gpu": ["tensorflow-gpu", "pillow"],
             "h2o": ["h2o"],
             "h2o-sparkling": ["h2o", "pyspark", "h2o-pysparkling"],
             "s3": ["boto3"],

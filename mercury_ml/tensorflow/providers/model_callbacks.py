@@ -1,4 +1,4 @@
-from keras.callbacks import Callback, TensorBoard, BaseLogger, EarlyStopping, ModelCheckpoint, TerminateOnNaN, \
+from tensorflow.keras.callbacks import Callback, TensorBoard, BaseLogger, EarlyStopping, ModelCheckpoint, TerminateOnNaN, \
         ProgbarLogger, RemoteMonitor, LearningRateScheduler, ReduceLROnPlateau, CSVLogger
 
 import os

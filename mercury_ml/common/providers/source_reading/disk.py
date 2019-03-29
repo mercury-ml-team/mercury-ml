@@ -49,7 +49,7 @@ def read_keras_single_input_image_iterator_data_set(generator_params, iterator_p
     :return: DataSet consiting of KerasIteratorFeaturesDataWrapper, KerasIteratorTargetsDataWrapper and KerasIteratorIndexDataWrapper
     """
 
-    from mercury_ml.keras.providers.image_generators.single_input import SingleInputImageDataGenerator
+    from mercury_ml.tensorflow.providers.image_generators.single_input import SingleInputImageDataGenerator
     from mercury_ml.common.providers.data_wrappers.keras import KerasIteratorFeaturesDataWrapper, \
         KerasIteratorTargetsDataWrapper, KerasIteratorIndexDataWrapper
 
@@ -79,7 +79,7 @@ def read_keras_multi_label_image_iterator_data_set(
     :return:
     """
 
-    from mercury_ml.keras.providers.image_generators.multi_label import MultiLabelImageDataGenerator
+    from mercury_ml.tensorflow.providers.image_generators.multi_label import MultiLabelImageDataGenerator
     from mercury_ml.common.providers.data_wrappers.keras import KerasIteratorFeaturesDataWrapper, \
         KerasIteratorTargetsDataWrapper, KerasIteratorIndexDataWrapper
 

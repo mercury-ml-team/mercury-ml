@@ -8,5 +8,5 @@ def load_hdf5_model(local_dir, filename, extension=".h5", custom_objects=None):
     :param dict custom_objects: Any custom objects  (such as custom loss functions) that were included when the model was saved
     :return: A Keras model
     """
-    from keras.models import load_model
+    from tensorflow.keras.models import load_model
     return load_model(local_dir + "/" + filename + extension, custom_objects=custom_objects)
