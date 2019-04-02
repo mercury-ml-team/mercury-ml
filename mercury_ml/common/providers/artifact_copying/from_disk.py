@@ -164,8 +164,11 @@ def _make_local_path(path_name):
     return path_name
 
 def _s3_key_exists(s3, s3_bucket, s3_key):
-    content = s3.head_object(Bucket=s3_bucket, Key=s3_key)
-    if content.get('ResponseMetadata', None) is not None:
-        return True
-    else:
+    try:
+        content = s3.head_object(Bucket=s3_bucket, Key=s3_key)
+        if content.get('ResponseMetadata', None) is not None:
+            return True
+        else:
+            return False
+    except:
         return False
