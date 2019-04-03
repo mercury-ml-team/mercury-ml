@@ -11,6 +11,7 @@ import os
 sys.path.append(os.path.split(os.path.split(os.getcwd())[0])[0])
 import uuid
 import json
+import copy
 
 from mercury_ml.common import tasks
 from mercury_ml.common import utils
@@ -72,10 +73,12 @@ read_source_train_param = {
           }
         }
 
-read_source_data_parm_valid = read_source_train_param
-read_source_dara_parm_test =  read_source_train_param
+read_source_data_parm_valid = copy.deepcopy(read_source_train_param)
+read_source_dara_parm_test =  copy.deepcopy(read_source_train_param)
 read_source_data_parm_valid["iterator_params"]["shuffle"]= False
 read_source_dara_parm_test["iterator_params"]["shuffle"]= False
+read_source_data_parm_valid["iterator_params"]["directory"]= "./example_data/"+data_bunch_name+"/valid"
+read_source_dara_parm_test["iterator_params"]["directory"]= "./example_data/"+data_bunch_name+"/test"
 
 
 # In[ ]:
