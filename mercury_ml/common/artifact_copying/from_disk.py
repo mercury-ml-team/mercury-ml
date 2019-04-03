@@ -192,15 +192,16 @@ def _make_local_path(path_name):
     return path_name
 
 def _s3_key_exists(s3, s3_bucket, s3_key):
+    import botocore
     try:
-        content = s3.head_object(Bucket=s3_bucket, Key=s3_key)
-        if content.get('ResponseMetadata', None) is not None:
-            return True
-        else:
+        s3.Object(Bucket=s3_bucket, Key=s3_key)
+        return True
+    except botocore.exceptions.ClientError as e:
+        if e.response['Error']['Code'] == "404":
             return False
-    except:
-        return False
-
+        else:
+            #something else has gone wrong
+            raise
 
 def _recursively_copy_directory_to_s3(directory, s3_dir, s3_session_params):
     for root, dirs, files in os.walk(directory):
