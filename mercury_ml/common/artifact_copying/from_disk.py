@@ -185,8 +185,6 @@ def copy_from_disk_to_gcs(source_dir, target_dir, filename, overwrite=False, del
     if delete_source:
         os.remove(source_dir + "/" + filename)
 
-
-
 def _make_local_path(path_name):
     if path_name[0] == ".":
         path_name = os.path.join(os.getcwd(), path_name)
@@ -203,7 +201,8 @@ def _s3_key_exists(s3, s3_bucket, s3_key):
     except:
         return False
 
-def _recursively_copy_directory(directory, s3_dir, s3_session_params):
+
+def _recursively_copy_directory_to_s3(directory, s3_dir, s3_session_params):
     for root, dirs, files in os.walk(directory):
         for file in files:
 
