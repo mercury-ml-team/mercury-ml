@@ -133,8 +133,8 @@ in the code snippet be, you can only use `model_saving.save_keras_hdf5` and `fro
 want to save the model in a different format, or copy it to a different store you must change your code to do so.
 
 ```python
-from mercury_ml.keras.providers import model_saving
-from mercury_ml.common.providers.artifact_copying import from_disk
+from mercury_ml.tensorflow import model_saving
+from mercury_ml.common.artifact_copying import from_disk
 import os
 
 # save model
@@ -159,8 +159,8 @@ the function used above, `model_saving.save_keras_hdf5` can be accessed via a co
 this in a config.
 
 ```python
-from mercury_ml.keras.containers import ModelSavers
-from mercury_ml.common.containers import ArtifactCopiers
+from mercury_ml.tensorflow import ModelSavers
+from mercury_ml.common import ArtifactCopiers
 import os
 
 config = {
@@ -193,8 +193,8 @@ to copy it to a remote location (in this example, to S3)
 
 ```python
 from mercury_ml.common.tasks import store_model
-from mercury_ml.keras.containers import ModelSavers
-from mercury_ml.common.containers import ArtifactCopiers
+from mercury_ml.tensorflow import ModelSavers
+from mercury_ml.common import ArtifactCopiers
 
 save_model = getattr(ModelSavers, config["save_model"])
 copy_from_local_to_remote = getattr(ArtifactCopiers, config["copy_model"])
@@ -236,9 +236,9 @@ As an example of how this works, let's create a `DataBunch` for a model training
 ```python
 
 import pandas as pd
-from mercury_ml.common.providers.data_wrappers.pandas import PandasDataWrapper
-from mercury_ml.common.providers.data_set import DataSet
-from mercury_ml.common.providers.data_bunch import DataBunch
+from mercury_ml.common.data_wrappers.pandas import PandasDataWrapper
+from mercury_ml.common.data_set import DataSet
+from mercury_ml.common.data_bunch import DataBunch
 
 path_to_input_data = "./example_data_train.csv"
 
@@ -275,7 +275,7 @@ data_bunch = DataBunch(data_sets_dict={
 Or afterwards via `DataBunch.add_data_set`:
 
 ```python
-from mercury_ml.common.providers.data_bunch import DataBunch
+from mercury_ml.common.data_bunch import DataBunch
 data_bunch = DataBunch()
 data_bunch.add_data_set(data_set_name="train", data_set=train_data_set)
 data_bunch.add_data_set(data_set_name="valid", data_set=valid_data_set)

@@ -1,7 +1,7 @@
 import pytest
 from mercury_ml.common.tasks import read_train_valid_test_data_bunch, read_test_data_bunch, store_artifacts, \
     evaluate_metrics, evaluate_label_metrics, store_model, load_model
-from mercury_ml.common.providers.data_set import DataSet
+from mercury_ml.common.data_set import DataSet
 
 def mock_read_data_set(return_value):
     return return_value

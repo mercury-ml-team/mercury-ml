@@ -25,7 +25,7 @@ class PandasDataWrapper():
         :return: a new H2ODataWrapper
         """
 
-        from mercury_ml.common.providers.data_wrappers.h2o import H2ODataWrapper
+        from mercury_ml.common.data_wrappers.h2o import H2ODataWrapper
         import h2o
         df_h2o = h2o.H2OFrame(self.underlying)
 
@@ -45,7 +45,7 @@ class PandasDataWrapper():
         :return: a new NumpyDataWrapper
         """
 
-        from mercury_ml.common.providers.data_wrappers.numpy import NumpyDataWrapper
+        from mercury_ml.common.data_wrappers.numpy import NumpyDataWrapper
         return NumpyDataWrapper(self.underlying.values, self.field_names)
 
     def to_spark(self, spark_session_params=None):
@@ -56,8 +56,8 @@ class PandasDataWrapper():
         :param: dict spark_session_params: A dictionary of parameters according to which to get or initialize a Spark session
         """
 
-        from mercury_ml.common.providers.data_wrappers.spark import SparkDataWrapper
-        from mercury_ml.spark.providers.session import get_or_create_spark_session
+        from mercury_ml.common.data_wrappers.spark import SparkDataWrapper
+        from mercury_ml.spark.session import get_or_create_spark_session
         self.underlying.columns = self.underlying.columns.astype(str)
 
         if not spark_session_params:

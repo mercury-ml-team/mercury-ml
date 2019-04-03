@@ -26,7 +26,7 @@ def copy_from_s3_to_disk(source_dir, target_dir, filename, overwrite=False, dele
             session = boto3.Session(**s3_session_params)
             s3 = session.resource("s3")
         else:
-            from mercury_ml.common.providers.artifact_copying import S3Singleton
+            from mercury_ml.common.artifact_copying import S3Singleton
             s3 = S3Singleton(**s3_session_params).s3
 
         if not os.path.isdir(target_dir):
@@ -54,7 +54,7 @@ def copy_from_s3_to_s3(source_dir, target_dir, filename=None, overwrite=False, d
         session = boto3.Session(**s3_session_params)
         s3 = session.resource("s3")
     else:
-        from mercury_ml.common.providers.artifact_copying import S3Singleton
+        from mercury_ml.common.artifact_copying import S3Singleton
         s3 = S3Singleton(**s3_session_params).s3
 
     source_s3_bucket_name, source_s3_path = source_dir.split("/", 1)

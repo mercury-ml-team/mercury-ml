@@ -22,7 +22,7 @@ def get_or_create_h2o_sparkling(h2o_context_params=None,  h2o_log_level="ERROR",
 
     # Start SparkSession
     #TODO possibly change this to create spark session outside and pass "spark" as variable
-    from mercury_ml.spark.providers.session import get_or_create_spark_session
+    from mercury_ml.spark.session import get_or_create_spark_session
 
     if not spark_session_params:
         spark_session_params = {}

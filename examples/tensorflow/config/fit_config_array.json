@@ -35,7 +35,7 @@
     },
     "save_model": {
       "names": [
-        "save_hdf5", "save_tensorflow_saved_model"
+        "save_hdf5", "save_tensorflow_saved_model_archived", "save_tensorflow_saved_model"
       ]
     },
     "copy_from_local_to_remote": {
@@ -144,7 +144,7 @@
     },
     "get_optimizer": {
       "params": {
-        "optimizer_name": "adam",
+        "optimizer_name": "Adam",
         "optimizer_params": {
           "lr": 0.0001
         }
@@ -200,16 +200,19 @@
         "extension": ".h5",
         "overwrite_remote": true
       },
+      "save_tensorflow_saved_model_archived": {
+        "local_dir": {"$ref": "#exec/save_model/save_hdf5/local_dir"},
+        "remote_dir": {"$ref": "#exec/save_model/save_hdf5/remote_dir"},
+        "filename": "{model_object_name}__tf_serving_predict_archived",
+        "temp_base_dir": "c:/tf_serving/_tmp_model/{model_object_name}__tf_serving_predict_archived",
+        "extension": ".zip",
+        "overwrite_remote": true
+      },
       "save_tensorflow_saved_model": {
         "local_dir": {"$ref": "#exec/save_model/save_hdf5/local_dir"},
         "remote_dir": {"$ref": "#exec/save_model/save_hdf5/remote_dir"},
         "filename": "{model_object_name}__tf_serving_predict",
-        "temp_base_dir": "c:/tf_serving/_tmp_model/{model_object_name}__tf_serving_predict",
-        "extension": ".zip",
-        "overwrite_remote": true,
-        "do_save_labels_txt": true,
-        "do_save_as_zip": true,
-        "labels_list": ["cat", "dog"]
+        "overwrite_remote": true
       }
     },
     "evaluate_custom_metrics": {

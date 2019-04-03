@@ -3,7 +3,7 @@ import os
 import sys
 import json
 from random import randint
-from mercury_ml.common.providers.artifact_storage.local import store_dict_json, store_pandas_json, store_pandas_pickle, \
+from mercury_ml.common.artifact_storage.local import store_dict_json, store_pandas_json, store_pandas_pickle, \
     store_h2o_frame
 import shutil
 

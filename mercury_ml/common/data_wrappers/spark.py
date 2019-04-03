@@ -25,8 +25,8 @@ class SparkDataWrapper():
         :return: a new H2OSparklingDataWrapper
         """
 
-        from mercury_ml.common.providers.data_wrappers.h2o import H2OSparklingDataWrapper
-        from mercury_ml.h2o.providers.session import get_or_create_h2o_sparkling
+        from mercury_ml.common.data_wrappers.h2o import H2OSparklingDataWrapper
+        from mercury_ml.h2o.session import get_or_create_h2o_sparkling
 
         # get H2OSparkling context (#TODO: if context doesn't exist yet, raise error! Should not be created here)
         if not h2o_sparkling_params:
@@ -62,7 +62,7 @@ class SparkDataWrapper():
         :return: a new PandasDataWrapper
         """
 
-        from mercury_ml.common.providers.data_wrappers.pandas import PandasDataWrapper
+        from mercury_ml.common.data_wrappers.pandas import PandasDataWrapper
         df = self.underlying.toPandas()
         return PandasDataWrapper(df, self.field_names)
 

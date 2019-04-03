@@ -8,7 +8,7 @@
   "meta_info": {
     "ml_engine": "keras (tensorflow)",
     "model_purpose": "test_generator",
-    "session_id": "16c534ee22ec4a068e0ebe1dfaa2f0d9",
+    "session_id": "34612236",
     "model_object_name": "{model_purpose}__{session_id}",
     "data_bunch_name": "images_456",
     "evaluation_session_id": "{evaluation_session_id}",

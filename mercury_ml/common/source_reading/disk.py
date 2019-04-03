@@ -2,8 +2,8 @@
 
 import pandas as pd
 
-from mercury_ml.common.providers.data_set import DataSet
-from mercury_ml.common.providers.data_wrappers.pandas import PandasDataWrapper
+from mercury_ml.common.data_set import DataSet
+from mercury_ml.common.data_wrappers.pandas import PandasDataWrapper
 import os
 
 def read_pandas_data_set(path, input_format, full_data_columns, index_columns, features_columns, targets_columns):
@@ -49,8 +49,8 @@ def read_keras_single_input_image_iterator_data_set(generator_params, iterator_p
     :return: DataSet consiting of KerasIteratorFeaturesDataWrapper, KerasIteratorTargetsDataWrapper and KerasIteratorIndexDataWrapper
     """
 
-    from mercury_ml.tensorflow.providers.image_generators.single_input import SingleInputImageDataGenerator
-    from mercury_ml.common.providers.data_wrappers.keras import KerasIteratorFeaturesDataWrapper, \
+    from mercury_ml.tensorflow.image_generators.single_input import SingleInputImageDataGenerator
+    from mercury_ml.common.data_wrappers.keras import KerasIteratorFeaturesDataWrapper, \
         KerasIteratorTargetsDataWrapper, KerasIteratorIndexDataWrapper
 
     generator = SingleInputImageDataGenerator(**generator_params)
@@ -79,8 +79,8 @@ def read_keras_multi_label_image_iterator_data_set(
     :return:
     """
 
-    from mercury_ml.tensorflow.providers.image_generators.multi_label import MultiLabelImageDataGenerator
-    from mercury_ml.common.providers.data_wrappers.keras import KerasIteratorFeaturesDataWrapper, \
+    from mercury_ml.tensorflow.image_generators.multi_label import MultiLabelImageDataGenerator
+    from mercury_ml.common.data_wrappers.keras import KerasIteratorFeaturesDataWrapper, \
         KerasIteratorTargetsDataWrapper, KerasIteratorIndexDataWrapper
 
     extension = os.path.splitext(label_df_path)[1]

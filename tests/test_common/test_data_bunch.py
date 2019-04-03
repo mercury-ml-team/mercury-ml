@@ -1,5 +1,5 @@
 import pytest
-from mercury_ml.common.providers.data_bunch import DataBunch
+from mercury_ml.common.data_bunch import DataBunch
 
 data_sets_dict = {
     "train": "hello",

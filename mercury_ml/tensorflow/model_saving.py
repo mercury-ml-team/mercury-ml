@@ -29,7 +29,7 @@ def save_tensorflow_saved_model_archived(model, local_dir, filename, extension="
     if not temp_base_dir:
         temp_base_dir = os.path.join(os.getcwd(), "_tmp_model", filename)
 
-    temp_dir=save_tensorflow_saved_model(model=model,
+    root_dir=save_tensorflow_saved_model(model=model,
                                          local_dir=temp_base_dir,
                                          filename=filename,
                                          model_number=model_number)
@@ -40,10 +40,10 @@ def save_tensorflow_saved_model_archived(model, local_dir, filename, extension="
     shutil.make_archive(
         base_name=os.path.join(local_dir, filename),
         format=extension[1:],
-        root_dir=os.path.split(temp_dir)[0],
-        base_dir=os.path.split(temp_dir)[1])
+        root_dir=root_dir,
+        base_dir=model_number)
 
-    shutil.rmtree(temp_dir, ignore_errors=True)
+    shutil.rmtree(root_dir, ignore_errors=True)
 
     return os.path.join(local_dir, filename + extension)
 
@@ -52,14 +52,15 @@ def save_tensorflow_saved_model(model, local_dir, filename, model_number="1"):
 
     from tensorflow.saved_model import save
 
-    dir = os.path.join(local_dir, filename, model_number)
+    root_dir = os.path.join(local_dir, filename)
+    sub_dir = os.path.join(root_dir, model_number)
 
-    if not os.path.isdir(dir):
-        os.makedirs(dir)
+    if not os.path.isdir(sub_dir):
+        os.makedirs(sub_dir)
 
-    save(model, dir)
+    save(model, sub_dir)
 
-    return dir
+    return root_dir
 
 def _make_dirs(dir):
     import os

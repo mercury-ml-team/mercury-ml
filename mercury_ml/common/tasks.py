@@ -4,7 +4,7 @@ multiple steps
 """
 
 import os
-from mercury_ml.common.providers.data_bunch import DataBunch
+from mercury_ml.common.data_bunch import DataBunch
 
 # source data reading
 def read_train_valid_test_data_bunch(read_data_set, train_params, valid_params, test_params):

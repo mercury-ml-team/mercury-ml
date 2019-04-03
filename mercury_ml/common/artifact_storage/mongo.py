@@ -26,7 +26,7 @@ def store_dict_on_mongo(data, document_id, database_name, collection_name, mongo
         from pymongo import MongoClient
         mongo_client = MongoClient(**mongo_client_params)
     else:
-        from mercury_ml.common.providers.artifact_storage import MongoClientSingleton
+        from mercury_ml.common.artifact_storage import MongoClientSingleton
         mongo_client = MongoClientSingleton(**mongo_client_params).client
 
     mongo_db = getattr(mongo_client, database_name)

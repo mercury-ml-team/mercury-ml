@@ -23,7 +23,7 @@ class KerasIteratorIndexDataWrapper(KerasIteratorDataWrapper):
         :return: a new NumpyDataWrapper
         """
 
-        from mercury_ml.common.providers.data_wrappers.numpy import NumpyDataWrapper
+        from mercury_ml.common.data_wrappers.numpy import NumpyDataWrapper
         index, index_fields = self._get_numpy_index()
         return NumpyDataWrapper(index, index_fields)
 
@@ -34,7 +34,7 @@ class KerasIteratorIndexDataWrapper(KerasIteratorDataWrapper):
         :return: a new PandasDataWrapper
         """
 
-        from mercury_ml.common.providers.data_wrappers.pandas import PandasDataWrapper
+        from mercury_ml.common.data_wrappers.pandas import PandasDataWrapper
         index, index_fields = self._get_numpy_index()
         return PandasDataWrapper(pd.DataFrame(index, columns=index_fields), index_fields)
 
@@ -65,7 +65,7 @@ class KerasIteratorTargetsDataWrapper(KerasIteratorDataWrapper):
         :return: a new NumpyDataWrapper
         """
 
-        from mercury_ml.common.providers.data_wrappers.numpy import NumpyDataWrapper
+        from mercury_ml.common.data_wrappers.numpy import NumpyDataWrapper
         targets, targets_fields = self._get_numpy_targets()
         return NumpyDataWrapper(targets, targets_fields)
 
@@ -76,7 +76,7 @@ class KerasIteratorTargetsDataWrapper(KerasIteratorDataWrapper):
         :return: a new PandasDataWrapper
         """
 
-        from mercury_ml.common.providers.data_wrappers.pandas import PandasDataWrapper
+        from mercury_ml.common.data_wrappers.pandas import PandasDataWrapper
         targets, targets_fields = self._get_numpy_targets()
         return PandasDataWrapper(pd.DataFrame(targets, columns=targets_fields), targets_fields)
 
@@ -109,7 +109,7 @@ class KerasIteratorFeaturesDataWrapper(KerasIteratorDataWrapper):
         :return: a new NumpyDataWrapper
         """
 
-        from mercury_ml.common.providers.data_wrappers.numpy import NumpyDataWrapper
+        from mercury_ml.common.data_wrappers.numpy import NumpyDataWrapper
         features, features_fields = self._get_numpy_features()
         return NumpyDataWrapper(features, features_fields)
 
@@ -120,7 +120,7 @@ class KerasIteratorFeaturesDataWrapper(KerasIteratorDataWrapper):
         :return: a new PandasDataWrapper
         """
 
-        from mercury_ml.common.providers.data_wrappers.pandas import PandasDataWrapper
+        from mercury_ml.common.data_wrappers.pandas import PandasDataWrapper
         features, features_fields = self._get_numpy_features()
         return PandasDataWrapper(pd.DataFrame(features, columns=features_fields), features_fields)
 

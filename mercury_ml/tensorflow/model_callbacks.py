@@ -3,8 +3,8 @@ from tensorflow.keras.callbacks import Callback, TensorBoard, BaseLogger, EarlyS
 
 import os
 
-# from ml_workflow.utils import utils
-# from ml_workflow.containers.core import Core
+# from mercury_ml.utils import utils
+# from mercury_ml.containers.core import Core
 # from sklearn.metrics import roc_auc_score
 #
 # class AUCGeneratorCallBackProvider(Callback):

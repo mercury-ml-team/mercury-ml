@@ -24,22 +24,44 @@ def copy_from_disk_to_disk(source_dir, target_dir, filename, overwrite=False, de
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
 
-    if overwrite == False:
-        if os.path.exists(target_path):
-            pass
-            #raise FileExistsError("File already exists, but overwrite was not activated")
+    if os.path.isdir(source_path):
+        # if source_path is a directory, perform a recursive copy
+
+
+
+        if overwrite == False:
+            if os.path.exists(target_path):
+                pass
+                #raise FileExistsError("File already exists, but overwrite was not activated")
+            else:
+                shutil.copytree(source_path, target_path)
+        else:
+            if os.path.exists(target_path):
+                shutil.rmtree(target_path)
+            shutil.copytree(source_path, target_path)
+
+        if delete_source == True:
+            if os.path.isdir(target_path):
+                shutil.rmtree(source_path)
+            else:
+                raise ChildProcessError("Delete Source was activated but copying file to new location failed")
+
+    else:
+        if overwrite == False:
+            if os.path.exists(target_path):
+                pass
+                #raise FileExistsError("File already exists, but overwrite was not activated")
+            else:
+                shutil.copyfile(source_path,target_path)
         else:
             shutil.copyfile(source_path,target_path)
-    else:
-        shutil.copyfile(source_path,target_path)
 
-    if delete_source == True:
-        # check if copy was successfull:
-        if os.path.exists(os.path.join(target_dir, filename)):
-            os.remove(os.path.join(source_dir, filename))
-        else:
-            raise ChildProcessError(
-                "Delete Source was activated but copying file to new location failed")
+        if delete_source == True:
+            # check if copy was successfull:
+            if os.path.exists(os.path.join(target_dir, filename)):
+                os.remove(os.path.join(source_dir, filename))
+            else:
+                raise ChildProcessError("Delete Source was activated but copying file to new location failed")
 
 
 def copy_from_disk_to_hdfs(source_dir, target_dir, filename, overwrite=False, delete_source=False):
@@ -74,7 +96,7 @@ def copy_from_disk_to_mongo(source_dir, target_dir, filename, database_name, col
     with open(source_path, "r") as f:
         data = json.load(f)
 
-    from mercury_ml.common.providers.artifact_storage.mongo import store_dict_on_mongo
+    from mercury_ml.common.artifact_storage.mongo import store_dict_on_mongo
     document_id, document_key = _get_document_id_and_key_from_path(target_dir)
 
     store_dict_on_mongo(data=data,
@@ -116,18 +138,27 @@ def copy_from_disk_to_s3(source_dir, target_dir, filename, overwrite=False, dele
         session = boto3.Session(**s3_session_params)
         s3 = session.resource("s3")
     else:
-        from mercury_ml.common.providers.artifact_copying import S3Singleton
+        from mercury_ml.common.artifact_copying import S3Singleton
         s3 = S3Singleton(**s3_session_params).s3
 
-    s3_bucket_name, s3_path = target_dir.split("/", 1)
-    s3_key = s3_path + "/" + filename
-
     source_path = os.path.join(source_dir, filename)
-    if overwrite or not _s3_key_exists(s3, s3_bucket_name, s3_key):
-        s3.Object(s3_bucket_name, s3_key).put(Body=open(source_path, "rb"))
+    if os.path.isdir(source_path):
+        # if source-path is a directory, perform a recursive copy
+        _recursively_copy_directory_to_s3(source_path,
+                                         s3_dir=target_dir+"/"+filename,
+                                         s3_session_params=s3_session_params)
+        if delete_source:
+            shutil.rmtree(source_path)
+    else:
+        # otherwise copy the single file
+        s3_bucket_name, s3_path = target_dir.split("/", 1)
+        s3_key = s3_path + "/" + filename
+        if overwrite or not _s3_key_exists(s3, s3_bucket_name, s3_key):
 
-    if delete_source:
-        os.remove(source_path)
+            s3.Object(s3_bucket_name, s3_key).put(Body=open(source_path, "rb"))
+
+        if delete_source:
+            os.remove(source_path)
 
 def copy_from_disk_to_gcs(source_dir, target_dir, filename, overwrite=False, delete_source=False):
     """
@@ -171,3 +202,15 @@ def _s3_key_exists(s3, s3_bucket, s3_key):
             return False
     except:
         return False
+
+def _recursively_copy_directory(directory, s3_dir, s3_session_params):
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+
+            subfolder = root.replace(directory, "")
+
+            copy_from_disk_to_s3(
+                source_dir=root,
+                filename=file,
+                target_dir=s3_dir + subfolder,
+                s3_session_params=s3_session_params)

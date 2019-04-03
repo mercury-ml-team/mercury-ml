@@ -9,7 +9,7 @@ def predict(data_set, model, **kwargs):
     """
 
     prediction_array = model.predict(x=data_set.features.underlying, **kwargs)
-    from mercury_ml.common.providers.data_wrappers.numpy import NumpyDataWrapper
+    from mercury_ml.common.data_wrappers.numpy import NumpyDataWrapper
     return NumpyDataWrapper(underlying=prediction_array, field_names=data_set.targets.field_names)
 
 
@@ -24,5 +24,5 @@ def predict_generator(data_set, model, **kwargs):
     """
 
     prediction_array = model.predict_generator(generator=data_set.features.underlying, **kwargs)
-    from mercury_ml.common.providers.data_wrappers.numpy import NumpyDataWrapper
+    from mercury_ml.common.data_wrappers.numpy import NumpyDataWrapper
     return NumpyDataWrapper(underlying=prediction_array, field_names=data_set.features.underlying.get_labels_dummies())

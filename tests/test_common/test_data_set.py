@@ -1,5 +1,5 @@
 import pytest
-from mercury_ml.common.providers.data_set import DataSet
+from mercury_ml.common.data_set import DataSet
 
 
 class MockADataWrapper():

@@ -15,6 +15,6 @@ def predict(data_set, model, return_columns = None, **kwargs):
     if return_columns:
         prediction_h2o_df = prediction_h2o_df[return_columns]
 
-    from mercury_ml.common.providers.data_wrappers.h2o import H2ODataWrapper
+    from mercury_ml.common.data_wrappers.h2o import H2ODataWrapper
     #TODO this should return an H2OSparklingDataWrapper in the input type is H2OSparklingDataWrapper
     return H2ODataWrapper(underlying=prediction_h2o_df, field_names=list(prediction_h2o_df.names))

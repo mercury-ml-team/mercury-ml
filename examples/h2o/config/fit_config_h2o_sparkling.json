@@ -71,7 +71,7 @@
         "h2o_log_level":"ERROR",
         "spark_session_params":{
           "spark_config": {
-            "spark.app.name": "ml_workflow_session_{session_id}"
+            "spark.app.name": "mercury_ml_session_{session_id}"
           },
           "log_level":"ERROR",
           "enableHiveSupport":true

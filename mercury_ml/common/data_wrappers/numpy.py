@@ -33,7 +33,7 @@ class NumpyDataWrapper():
         :return: a new PandasDataWrapper
         """
         import pandas as pd
-        from mercury_ml.common.providers.data_wrappers.pandas import PandasDataWrapper
+        from mercury_ml.common.data_wrappers.pandas import PandasDataWrapper
         df = pd.DataFrame(data=self.underlying, columns=self.field_names)
 
         return PandasDataWrapper(df, self.field_names)
