@@ -113,7 +113,6 @@ def copy_from_disk_to_s3(source_dir, target_dir, filename, overwrite=False, dele
 
     import boto3
     if not reuse_existing:
-        # s3 = boto3.resource("s3")
         session = boto3.Session(**s3_session_params)
         s3 = session.resource("s3")
     else:

@@ -135,7 +135,7 @@ def evaluate_label_metrics(data_set, label_specific_custom_metrics_dict):
 
 
 # model storages
-def store_model(save_model, model, filename, local_dir, extension=None, copy_from_local_to_remote=None,
+def store_model(save_model, model, filename, local_dir, copy_from_local_to_remote=None,
                 remote_dir=None, overwrite_remote=None, keep_local=True, **kwargs):
     """
     Uses "save_model" and "model" to save a model to local disk. Then uses "copy_from_local_to_remote" to also store
@@ -157,7 +157,6 @@ def store_model(save_model, model, filename, local_dir, extension=None, copy_fro
     path = save_model(model=model,
                       filename=filename,
                       local_dir=local_dir,
-                      extension=extension,
                       **kwargs)
 
     if copy_from_local_to_remote and remote_dir:
