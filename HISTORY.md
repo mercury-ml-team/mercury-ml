@@ -1,5 +1,11 @@
 # History
 
+
+## 0.2.0
+- This release sees the introduction to TensorFlow 2.0, for now using the pre-release alpha version. The `keras` implementations have all been replaced with `tensorflow.keras`.
+- It is now also possible to save models using the tensorflow saved_model API
+- The "providers" / "containers" structure has been flattened. Modules that were previously under `mercury_ml.common.providers` and under `mercury_ml.common.containers` are now simply under `mercury_ml.common`. The same goes for the structure under `mercury_ml.<machine learning engine>`
+
 ## 0.1.4
 - Under `mercury_ml.keras.providers.model_fitting` bot `fit` and `fit_generator` now:
   1. Accept `**kwargs` to be passed to the underlying Keras functions
