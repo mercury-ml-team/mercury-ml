@@ -76,8 +76,6 @@ def fit_generator(model, data_bunch, callbacks, return_best_model=False, **kwarg
     try:
         model.fit_generator(generator=train_iterator,
                             validation_data=valid_iterator,
-                            steps_per_epoch=train_iterator.n // train_iterator.batch_size,
-                            validation_steps=valid_iterator.n // valid_iterator.batch_size,
                             callbacks=callbacks,
                             **kwargs)
 
