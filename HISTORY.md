@@ -1,5 +1,8 @@
 # History
 
+## 0.2.2
+- Saving to S3 now always overwrites as the methods used so far to check whether an object exists has proven to be less than reliable
+
 ## 0.2.1
 - Fixed a small error where checking whether a S3 object already exists did not work correctly
 

@@ -153,9 +153,9 @@ def copy_from_disk_to_s3(source_dir, target_dir, filename, overwrite=False, dele
         # otherwise copy the single file
         s3_bucket_name, s3_path = target_dir.split("/", 1)
         s3_key = s3_path + "/" + filename
-        if overwrite or not _s3_key_exists(s3, s3_bucket_name, s3_key):
-
-            s3.Object(s3_bucket_name, s3_key).put(Body=open(source_path, "rb"))
+        # if overwrite or not _s3_key_exists(s3, s3_bucket_name, s3_key):
+        # currently this function will always overwrite
+        s3.Object(s3_bucket_name, s3_key).put(Body=open(source_path, "rb"))
 
         if delete_source:
             os.remove(source_path)
@@ -191,17 +191,6 @@ def _make_local_path(path_name):
         path_name = os.path.abspath(path_name)
     return path_name
 
-def _s3_key_exists(s3, s3_bucket, s3_key):
-    import botocore
-    try:
-        s3.Object(s3_bucket, s3_key)
-        return True
-    except botocore.exceptions.ClientError as e:
-        if e.response['Error']['Code'] == "404":
-            return False
-        else:
-            #something else has gone wrong
-            raise
 
 def _recursively_copy_directory_to_s3(directory, s3_dir, s3_session_params):
     for root, dirs, files in os.walk(directory):

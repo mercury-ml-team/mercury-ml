@@ -67,22 +67,9 @@ def copy_from_s3_to_s3(source_dir, target_dir, filename=None, overwrite=False, d
         source_s3_key = source_s3_path + "/" + filename
         target_s3_key = target_s3_path + "/" + filename
 
-    if overwrite or not _s3_key_exists(s3, target_s3_bucket_name, target_s3_key):
-        s3.meta.client.copy({"Bucket": source_s3_bucket_name, "Key": source_s3_key}, target_s3_bucket_name,
-                            target_s3_key)
+    # if overwrite or not _s3_key_exists(s3, target_s3_bucket_name, target_s3_key):
+    s3.meta.client.copy({"Bucket": source_s3_bucket_name, "Key": source_s3_key}, target_s3_bucket_name,
+                        target_s3_key)
 
     if delete_source:
         s3.Object(source_s3_bucket_name, source_s3_key).delete()
-
-
-def _s3_key_exists(s3, s3_bucket, s3_key):
-    import botocore
-    try:
-        s3.Object(s3_bucket, s3_key)
-        return True
-    except botocore.exceptions.ClientError as e:
-        if e.response['Error']['Code'] == "404":
-            return False
-        else:
-            #something else has gone wrong
-            raise
