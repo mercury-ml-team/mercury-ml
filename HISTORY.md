@@ -1,5 +1,7 @@
 # History
 
+## 0.2.1
+- Fixed a small error where checking whether a S3 object already exists did not work correctly
 
 ## 0.2.0
 - This release sees the introduction to TensorFlow 2.0, for now using the pre-release alpha version. The `keras` implementations have all been replaced with `tensorflow.keras`.

@@ -76,8 +76,13 @@ def copy_from_s3_to_s3(source_dir, target_dir, filename=None, overwrite=False, d
 
 
 def _s3_key_exists(s3, s3_bucket, s3_key):
-    content = s3.head_object(Bucket=s3_bucket, Key=s3_key)
-    if content.get('ResponseMetadata', None) is not None:
+    import botocore
+    try:
+        s3.Object(s3_bucket, s3_key)
         return True
-    else:
-        return False
+    except botocore.exceptions.ClientError as e:
+        if e.response['Error']['Code'] == "404":
+            return False
+        else:
+            #something else has gone wrong
+            raise

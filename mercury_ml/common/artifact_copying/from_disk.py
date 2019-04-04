@@ -194,7 +194,7 @@ def _make_local_path(path_name):
 def _s3_key_exists(s3, s3_bucket, s3_key):
     import botocore
     try:
-        s3.Object(Bucket=s3_bucket, Key=s3_key)
+        s3.Object(s3_bucket, s3_key)
         return True
     except botocore.exceptions.ClientError as e:
         if e.response['Error']['Code'] == "404":
