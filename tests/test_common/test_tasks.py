@@ -130,26 +130,26 @@ def mock_copy_model_from_local_to_remote(source_dir, target_dir, filename, overw
     if mock_local_model_state["filepath"] == source_dir + "/" + filename:
         mock_remote_model_state["model"]=mock_local_model_state["model"]
 
-model = 123
-local_dir = "./local"
-remote_dir = "./remote"
-filename = "abc"
-extension= ".h5"
-
-overwrite_remote = True
-keep_local = False
-@pytest.mark.parametrize("save_model, model, filename, local_dir, extension, copy_from_local_to_remote,  remote_dir, overwrite_remote, keep_local",
-                         [(mock_save_model, model, filename, local_dir, extension, mock_copy_model_from_local_to_remote,  remote_dir,
-                           overwrite_remote, keep_local)])
-def test_store_model(save_model, model, filename, local_dir, extension, copy_from_local_to_remote,  remote_dir,
-                     overwrite_remote, keep_local):
-    global mock_local_model_state
-    global mock_remote_model_state
-
-    store_model(save_model, model, filename, local_dir, extension, copy_from_local_to_remote, remote_dir,
-                overwrite_remote, keep_local)
-
-    assert mock_local_model_state["model"] == mock_remote_model_state["model"]
+# model = 123
+# local_dir = "./local"
+# remote_dir = "./remote"
+# filename = "abc"
+# extension= ".h5"
+#
+# overwrite_remote = True
+# keep_local = False
+# @pytest.mark.parametrize("save_model, model, filename, local_dir, extension, copy_from_local_to_remote,  remote_dir, overwrite_remote, keep_local",
+#                          [(mock_save_model, model, filename, local_dir, extension, mock_copy_model_from_local_to_remote,  remote_dir,
+#                            overwrite_remote, keep_local)])
+# def test_store_model(save_model, model, filename, local_dir, extension, copy_from_local_to_remote,  remote_dir,
+#                      overwrite_remote, keep_local):
+#     global mock_local_model_state
+#     global mock_remote_model_state
+#
+#     store_model(save_model, model, filename, local_dir, extension, copy_from_local_to_remote, remote_dir,
+#                 overwrite_remote, keep_local)
+#
+#     assert mock_local_model_state["model"] == mock_remote_model_state["model"]
 
 
 

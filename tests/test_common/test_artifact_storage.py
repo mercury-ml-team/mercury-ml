@@ -72,7 +72,7 @@ def test_store_dict_json(input_dict, directory, filename):
     data = input_dict
     store_dict_json(data, directory, filename)
 
-    filepath = os.path.join(directory, filename)
+    filepath = os.path.join(directory, filename+ ".json")
     assert os.path.isfile(filepath)
 
     with open(filepath, "r") as f:
