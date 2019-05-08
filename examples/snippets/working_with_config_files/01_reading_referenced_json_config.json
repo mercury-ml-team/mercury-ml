@@ -1,0 +1,9 @@
+{
+  "meta_info": {
+    "model_id": "123",
+    "model_object_name": "my_model_123.h5"
+  },
+  "save_model": {
+    "filename": {"$ref": "#meta_info/model_object_name"}
+  }
+}
