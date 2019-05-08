@@ -1,0 +1,37 @@
+{
+    "read_data_set": "read_disk_pandas",
+    "params_dict": {
+        "train": {
+            "path": "./example_data/train.csv",
+            "input_format": ".csv",
+            "data_wrappers_params_dict": {
+                "index": ["ID", "ID2"],
+                "features": ["field1_num", "field2_num", "field3_num"],
+                "targets": ["field4_target", "field5_target", "field6_target"],
+                "full_data": ["ID", "ID2", "field1_num", "field2_num", "field3_num", "field4_target", "field5_target", "field6_target"]
+            }
+        },
+        "valid": {
+            "path": "./example_data/valid.csv",
+            "input_format": ".csv",
+            "data_wrappers_params_dict": {
+                "index": ["ID", "ID2"],
+                "features": ["field1_num", "field2_num", "field3_num"],
+                "targets": ["field4_target", "field5_target", "field6_target"],
+                "full_data": ["ID", "ID2", "field1_num", "field2_num", "field3_num", "field4_target", "field5_target",
+                              "field6_target"]
+            }
+        },
+        "test": {
+            "path": "./example_data/test.csv",
+            "input_format": ".csv",
+            "data_wrappers_params_dict": {
+                "index": ["ID", "ID2"],
+                "features": ["field1_num", "field2_num", "field3_num"],
+                "targets": ["field4_target", "field5_target", "field6_target"],
+                "full_data": ["ID", "ID2", "field1_num", "field2_num", "field3_num", "field4_target", "field5_target",
+                              "field6_target"]
+            }
+        }
+    }
+}

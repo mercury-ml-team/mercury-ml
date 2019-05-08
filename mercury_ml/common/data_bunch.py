@@ -7,6 +7,16 @@ class DataBunch:
         if data_sets_dict:
             self.add_data_sets(data_sets_dict)
 
+    def __str__(self):
+        string = "<{}> \n".format(type(self).__name__)
+        for data_set_name, data_set in self.__dict__.items():
+            string=string+"  {} <{}>\n".format(data_set_name, type(data_set).__name__)
+            for data_wrapper_name, data_wrapper in data_set.__dict__.items():
+                string=string+"    {} <{}>\n".format(data_wrapper_name, type(data_wrapper).__name__)
+
+        return string +"\n"
+
+
     def add_data_sets(self, data_sets_dict):
         """
         Adds datasets to this DataBunch. For example
