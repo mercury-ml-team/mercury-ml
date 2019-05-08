@@ -91,46 +91,22 @@
         "train_params": {
           "path": "./example_data/{data_bunch_name}/train.csv",
           "input_format": ".csv",
-          "full_data_columns": [
-            "ID",
-            "ID2",
-            "field1_num",
-            "field2_num",
-            "field3_num",
-            "field4_target",
-            "field5_target",
-            "field6_target"
-          ],
-          "index_columns": [
-            "ID",
-            "ID2"
-          ],
-          "features_columns": [
-            "field1_num",
-            "field2_num",
-            "field3_num"
-          ],
-          "targets_columns": [
-            "field4_target",
-            "field5_target",
-            "field6_target"
-          ]
+          "data_wrappers_params":  {
+            "index": ["ID", "ID2"],
+            "features": ["field1_num", "field2_num", "field3_num"],
+            "targets": ["field4_target", "field5_target", "field6_target"],
+            "full_data": ["ID", "ID2", "field1_num", "field2_num", "field3_num", "field4_target", "field5_target", "field6_target"]
+          }
         },
         "valid_params": {
           "path": "./example_data/{data_bunch_name}/valid.csv",
           "input_format": {"$ref": "#exec/read_source_data/params/train_params/input_format"},
-          "full_data_columns": {"$ref": "#exec/read_source_data/params/train_params/full_data_columns"},
-          "index_columns": {"$ref": "#exec/read_source_data/params/train_params/index_columns"},
-          "features_columns": {"$ref": "#exec/read_source_data/params/train_params/features_columns"},
-          "targets_columns": {"$ref": "#exec/read_source_data/params/train_params/targets_columns"}
+          "data_wrappers_params": {"$ref": "#exec/read_source_data/params/train_params/data_wrappers_params"}
         },
         "test_params": {
           "path": "./example_data/{data_bunch_name}/test.csv",
           "input_format": {"$ref": "#exec/read_source_data/params/train_params/input_format"},
-          "full_data_columns": {"$ref": "#exec/read_source_data/params/train_params/full_data_columns"},
-          "index_columns": {"$ref": "#exec/read_source_data/params/train_params/index_columns"},
-          "features_columns": {"$ref": "#exec/read_source_data/params/train_params/features_columns"},
-          "targets_columns": {"$ref": "#exec/read_source_data/params/train_params/targets_columns"}
+          "data_wrappers_params": {"$ref": "#exec/read_source_data/params/train_params/data_wrappers_params"}
         }
       }
     },

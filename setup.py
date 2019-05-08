@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 setup(name="mercury-ml",
-      version="0.2.2",
+      version="0.2.3",
       description="A library for managing Machine Learning workflows",
       url="https://github.com/mercury-ml-team/mercury-ml",
       author="Karl Schriek",

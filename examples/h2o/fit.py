@@ -397,8 +397,6 @@ print("Data predicted with following parameters: \n")
 print_dict(config["exec"]["predict"].get("params"))
 
 
-data_bunch_predict.test.predictions.underlying
-
 # ### Evaluate custom metrics
 
 # ##### Transform data
@@ -506,5 +504,3 @@ for data_set_name, data_set_params in config["exec"]["save_targets"]["data_sets"
 
 print("Targets saved with following parameters: \n")
 print_dict(config["exec"]["save_targets"])
-
-

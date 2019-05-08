@@ -143,7 +143,7 @@ print(json.dumps(evaluation_session, indent=2))
 #
 # These are the functions or classes we will be using in this workflow. We get / instatiate them all at the beginning using parameters under `config["initialization"]`.
 #
-# Here we use mainly use `getattr` to fetch them via the `containers` module based on a string input in the config file. Providers could however also be fetched directly. The following three methods are all equivalent:
+# Here we use mainly use `getattr` to fetch them via the alias containers based on a string input in the config file. Providers could however also be fetched directly. The following three methods are all equivalent:
 #
 # ```python
 # # 1. (what we are using in this notebook)

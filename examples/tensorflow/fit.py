@@ -140,7 +140,7 @@ print(json.dumps(session, indent=2))
 #
 # Theseare the functions or classes we will be using in this workflow. We get / instatiate them all at the beginning using parameters under `config["initialization"]`.
 #
-# Here we use mainly use `getattr` to fetch them via the `containers` module based on a string input in the config file. Providers could however also be fetched directly. The following three methods are all equivalent:
+# Here we use mainly use `getattr` to fetch them via the alias containers based on a string input in the config file. Providers could however also be fetched directly. The following three methods are all equivalent:
 #
 # ```python
 # # 1. (what we are using in this notebook)
@@ -250,6 +250,8 @@ predict = get_and_log(mercury_ml.tensorflow.PredictionFunctions, config["init"][
 # Here we use the providers defined above to execute various tasks
 
 # ### Get source data
+
+read_source_data_set
 
 data_bunch_source = tasks.read_train_valid_test_data_bunch(read_source_data_set,**config["exec"]["read_source_data"]["params"] )
 print("Source data read using following parameters: \n")

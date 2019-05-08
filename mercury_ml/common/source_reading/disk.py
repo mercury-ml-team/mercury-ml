@@ -4,7 +4,7 @@ from mercury_ml.common.data_set import DataSet
 from mercury_ml.common.data_wrappers.pandas import PandasDataWrapper
 import os
 
-def read_pandas_data_set(path, data_wrappers_params_dict, input_format):
+def read_pandas_data_set(path, data_wrappers_params, input_format):
     """
     Reads a pandas dataset from a local source and creates a DataSet consisting of PandasDataWrappers for full_data
     index, features and targets
@@ -28,7 +28,7 @@ def read_pandas_data_set(path, data_wrappers_params_dict, input_format):
         raise NotImplementedError("Extension '{}' has not yet been implemented")
 
     data_wrappers_dict = {}
-    for name, field_names in data_wrappers_params_dict.items():
+    for name, field_names in data_wrappers_params.items():
         data_wrappers_dict[name] = PandasDataWrapper(df[field_names], field_names)
 
     return DataSet(data_wrappers_dict)

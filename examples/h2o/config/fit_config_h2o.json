@@ -69,86 +69,42 @@
         "train_params": {
           "path": "./example_data/{data_bunch_name}/train.csv",
           "input_format": ".csv",
-          "full_data_columns": [
-            "ID",
-            "ID2",
-            "field1_num",
-            "field2_num",
-            "field3_num",
-            "field4_factor",
-            "field5_factor",
-            "field6_target"
-          ],
-          "index_columns": [
-            "ID",
-            "ID2"
-          ],
-          "features_columns": [
-            "field4_factor",
-            "field5_factor",
-            "field1_num",
-            "field2_num",
-            "field3_num"
-          ],
-          "targets_columns": [
-            "field6_target"
-          ]
+          "data_wrappers_params": {
+            "full_data": [
+              "ID",
+              "ID2",
+              "field1_num",
+              "field2_num",
+              "field3_num",
+              "field4_factor",
+              "field5_factor",
+              "field6_target"
+            ],
+            "index": [
+              "ID",
+              "ID2"
+            ],
+            "features": [
+              "field4_factor",
+              "field5_factor",
+              "field1_num",
+              "field2_num",
+              "field3_num"
+            ],
+            "targets": [
+              "field6_target"
+            ]
+          }
         },
         "valid_params": {
           "path": "./example_data/{data_bunch_name}/valid.csv",
-          "input_format": ".csv",
-          "full_data_columns": [
-            "ID",
-            "ID2",
-            "field1_num",
-            "field2_num",
-            "field3_num",
-            "field4_factor",
-            "field5_factor",
-            "field6_target"
-          ],
-          "index_columns": [
-            "ID",
-            "ID2"
-          ],
-          "features_columns": [
-            "field4_factor",
-            "field5_factor",
-            "field1_num",
-            "field2_num",
-            "field3_num"
-          ],
-          "targets_columns": [
-            "field6_target"
-          ]
+          "input_format": {"$ref": "#exec/read_source_data/params/train_params/input_format"},
+          "data_wrappers_params": {"$ref": "#exec/read_source_data/params/train_params/data_wrappers_params"}
         },
         "test_params": {
           "path": "./example_data/{data_bunch_name}/test.csv",
-          "input_format": ".csv",
-          "full_data_columns": [
-            "ID",
-            "ID2",
-            "field1_num",
-            "field2_num",
-            "field3_num",
-            "field4_factor",
-            "field5_factor",
-            "field6_target"
-          ],
-          "index_columns": [
-            "ID",
-            "ID2"
-          ],
-          "features_columns": [
-            "field4_factor",
-            "field5_factor",
-            "field1_num",
-            "field2_num",
-            "field3_num"
-          ],
-          "targets_columns": [
-            "field6_target"
-          ]
+          "input_format": {"$ref": "#exec/read_source_data/params/train_params/input_format"},
+          "data_wrappers_params": {"$ref": "#exec/read_source_data/params/train_params/data_wrappers_params"}
         }
       }
     },
