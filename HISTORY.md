@@ -1,7 +1,9 @@
 # History
 
 ## 0.2.3 
-- 
+- Custom __str__ functions have been added to DataSet and DataBuch so that printing instances of these will show a sensible hierarchy of information
+- A generic "read_data_bunch" function has been added to mercury_ml.common.tasks which can take arbitrarily named DataSets
+- The `read_pandas_data_set` function in `mercury_ml.common.source_reading.disk` has been made more abstract. It can will now create arbitrarily named data_wrappers based on what is input in the `data_wrappers_params` field
 
 ## 0.2.2
 - Saving to S3 now always overwrites as the methods used so far to check whether an object exists has proven to be less than reliable
