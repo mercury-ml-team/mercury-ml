@@ -27,13 +27,13 @@ The package is split firstly into two broad sections:
 
 Within these sections there is a further subdivision into three APIs:
 * `providers`: The individual (modular) building-blocks used to build up a workflow
-* `containers`: IoC containers over which the desired providers can be fetched.
+* `aliases`: Centralised containers over which the desired providers can be fetched.
 * `tasks`: Small predefined chunks of work, mostly stringing together a handful of logical steps to be executed by various providers
 
 You can interact with `mercury-ml` via any or all of these APIs. They deliver different levels of abstraction depending
 on what you need. You can also easily mix in your own custom providers.
 
-To understand the purpose and function of each individual provider, container and task, please refer to the `mercury-ml`
+To understand the purpose and function of each individual provider, alias container and task, please refer to the `mercury-ml`
 API documentation.
 
 ## Dependencies
@@ -77,8 +77,8 @@ Below are four simple examples that each do the same thing: save a Keras model t
 of abstraction:
 1. Without using `mercury-ml` (i.e. directly using the underlying dependencies)
 2. Using the `providers` API
-3. Using the `containers` API
-4. Using the `tasks` API (in conjunction with the `containers` API)
+3. Using the `aliases` API
+4. Using the `tasks` API (in conjunction with the `aliases` API)
 
 Each of these examples
 are perfectly valid, though in certain circumstances one may make more sense than the other.
@@ -150,9 +150,9 @@ from_disk.copy_from_disk_to_s3(source_dir=local_dir,
 ```
 
 
-##### 3. Example via ``containers``
+##### 3. Example via ``aliases``
 
-Using the `containers` API makes the most sense when you want to steer your workflow via a configuration file. The containers
+Using the `alias` API makes the most sense when you want to steer your workflow via a configuration file. The alias containers
 are just light-weight classes that allow you to access various similar providers from a single location. For example,
 the function used above, `model_saving.save_keras_hdf5` can be accessed via a container as `ModelSavers.save_hdf5`. Using the
 `getattr` function this can also be accessed as `getattr(ArtifactCopiers, "save_hdf5")` allowing us to easily parameterize
@@ -184,7 +184,7 @@ copy_from_local_to_remote(source_dir=local_dir,
                           )
 ```
 
-##### 4. Example via ``tasks`` (in conjunction with `containers`)
+##### 4. Example via ``tasks`` (in conjunction with `aliases`)
 
 Using the tasks API makes sense when you want to use a single function that defines a small workflow that involves more
 than one `provider` and requires multiple steps. For example, the `store_model` task below is injected with a `save_model`
