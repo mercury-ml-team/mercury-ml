@@ -7,6 +7,38 @@ import os
 from mercury_ml.common.data_bunch import DataBunch
 
 # source data reading
+def read_data_bunch(read_data_set, params_dict):
+    """
+    Takes the provider "read_data_set" and uses it to read arbitrarily names DataSets and add them to a
+    new DataBunch
+
+    :param callable read_data_set: A function that reads source data and returns a DatSet
+    :param dict params_dict: A dictionary consisting of the names and the parameters according to which DataSets are to
+    be created. For example:
+    {
+        "train": {
+            "path": "./example_data/train.csv",
+            "input_format": ".csv",
+            "data_wrappers_params_dict": {
+                "index": ["ID", "ID2"],
+                "features": ["field1_num", "field2_num", "field3_num"],
+                "targets": ["field4_target", "field5_target", "field6_target"],
+                "full_data": ["ID", "ID2", "field1_num", "field2_num", "field3_num", "field4_target", "field5_target", "field6_target"]
+            }
+        },
+        "valid" : {...},
+        "test" : {...}
+    }
+
+    :return: a DataBunch
+    """
+
+    data_sets_dict = {}
+    for data_set_name, params in params_dict.items():
+        data_sets_dict[data_set_name] = read_data_set(**params)
+
+    return DataBunch(data_sets_dict)
+
 def read_train_valid_test_data_bunch(read_data_set, train_params, valid_params, test_params):
     """
     Takes the provider "read_data_set" and uses it to read "train, "valid" and "test" DataSets and add them to a

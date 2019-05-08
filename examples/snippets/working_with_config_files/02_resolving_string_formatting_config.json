@@ -1,0 +1,9 @@
+{
+  "meta_info": {
+    "model_id": "{model_id}",
+    "model_object_name": "my_model_{model_id}.h5"
+  },
+  "save_model": {
+    "filepath": "/some/path/{model_object_name}"
+  }
+}

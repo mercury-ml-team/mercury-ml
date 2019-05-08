@@ -1,12 +1,10 @@
-#TODO possibly split into two modules: data_set readers and data_bunch readers
-
 import pandas as pd
 
 from mercury_ml.common.data_set import DataSet
 from mercury_ml.common.data_wrappers.pandas import PandasDataWrapper
 import os
 
-def read_pandas_data_set(path, input_format, full_data_columns, index_columns, features_columns, targets_columns):
+def read_pandas_data_set(path, data_wrappers_params_dict, input_format):
     """
     Reads a pandas dataset from a local source and creates a DataSet consisting of PandasDataWrappers for full_data
     index, features and targets
@@ -21,22 +19,19 @@ def read_pandas_data_set(path, input_format, full_data_columns, index_columns, f
     """
 
     if input_format == ".pkl":
-        df = pd.read_pickle(path)[full_data_columns]
+        df = pd.read_pickle(path)
     elif input_format == ".csv":
-        df = pd.read_csv(path, usecols=full_data_columns)
+        df = pd.read_csv(path)
     elif input_format == ".json":
-        df = pd.read_json(path)[full_data_columns]
+        df = pd.read_json(path)
     else:
         raise NotImplementedError("Extension '{}' has not yet been implemented")
 
-    return DataSet(
-                {
-                    "full_data": PandasDataWrapper(df, full_data_columns),
-                    "index": PandasDataWrapper(df[index_columns], index_columns),
-                    "features": PandasDataWrapper(df[features_columns], features_columns),
-                    "targets": PandasDataWrapper(df[targets_columns], targets_columns)
-                }
-    )
+    data_wrappers_dict = {}
+    for name, field_names in data_wrappers_params_dict.items():
+        data_wrappers_dict[name] = PandasDataWrapper(df[field_names], field_names)
+
+    return DataSet(data_wrappers_dict)
 
 
 def read_keras_single_input_image_iterator_data_set(generator_params, iterator_params):

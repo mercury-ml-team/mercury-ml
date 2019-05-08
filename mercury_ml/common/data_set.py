@@ -7,6 +7,13 @@ class DataSet:
         if data_wrappers_dict:
             self.add_data_wrappers(data_wrappers_dict)
 
+    def __str__(self):
+        string="<{}> \n".format(type(self).__name__)
+        for data_wrapper_name, data_wrapper in self.__dict__.items():
+            string=string+"  {} <{}> \n".format(data_wrapper_name, type(data_wrapper).__name__)
+        return string
+
+
     def add_data_wrapper(self, data_wrapper_name, data_wrapper):
         """
         Adds a single DataWrapper to this DataSet
@@ -86,6 +93,8 @@ class DataSet:
         Transforms only the underlying full data. Populates features, targets and index by slicing the transformed data
         instead of transforming each separately
         """
+        if full_data_wrapper_params is None:
+            full_data_wrapper_params = {}
 
         current_full_data_wrapper = self.full_data
         transform = getattr(current_full_data_wrapper, "to_" + transform_to)
