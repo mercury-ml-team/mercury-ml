@@ -1,0 +1,9 @@
+pillow
+h2o
+numpy
+pandas
+sklearn
+jsonref
+json-tricks
+tensorflow==2.0.0-alpha0
+mercury-ml
