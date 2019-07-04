@@ -19,13 +19,13 @@ data_wrappers_params_dict = {
 
 data_sets_dict = {
     "train": read_pandas_data_set(path="./example_data/train.csv",
-                                  data_wrappers_params_dict=data_wrappers_params_dict,
+                                  data_wrappers_params=data_wrappers_params_dict,
                                   input_format=".csv"),
     "valid": read_pandas_data_set(path="./example_data/valid.csv",
-                                  data_wrappers_params_dict=data_wrappers_params_dict,
+                                  data_wrappers_params=data_wrappers_params_dict,
                                   input_format=".csv"),
     "test": read_pandas_data_set(path="./example_data/test.csv",
-                                  data_wrappers_params_dict=data_wrappers_params_dict,
+                                  data_wrappers_params=data_wrappers_params_dict,
                                   input_format=".csv")
 }
 

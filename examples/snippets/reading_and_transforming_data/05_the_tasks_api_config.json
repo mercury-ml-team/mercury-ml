@@ -4,7 +4,7 @@
         "train": {
             "path": "./example_data/train.csv",
             "input_format": ".csv",
-            "data_wrappers_params_dict": {
+            "data_wrappers_params": {
                 "index": ["ID", "ID2"],
                 "features": ["field1_num", "field2_num", "field3_num"],
                 "targets": ["field4_target", "field5_target", "field6_target"],
@@ -14,7 +14,7 @@
         "valid": {
             "path": "./example_data/valid.csv",
             "input_format": ".csv",
-            "data_wrappers_params_dict": {
+            "data_wrappers_params": {
                 "index": ["ID", "ID2"],
                 "features": ["field1_num", "field2_num", "field3_num"],
                 "targets": ["field4_target", "field5_target", "field6_target"],
@@ -25,7 +25,7 @@
         "test": {
             "path": "./example_data/test.csv",
             "input_format": ".csv",
-            "data_wrappers_params_dict": {
+            "data_wrappers_params": {
                 "index": ["ID", "ID2"],
                 "features": ["field1_num", "field2_num", "field3_num"],
                 "targets": ["field4_target", "field5_target", "field6_target"],
