@@ -26,6 +26,14 @@ class SourceReaders:
     read_hive_spark = hive.read_spark_data_set
 
 
+class MetricEvaluators:
+    """IoC container for CustomMetricEvaluator providers."""
+    from mercury_ml.common import metric_evaluation
+
+    evaluate_metrics = metric_evaluation.evaluate_metrics
+    evaluate_label_metrics = metric_evaluation.evaluate_label_metrics
+
+
 class CustomMetrics:
     """IoC container for CustomMetric providers."""
 
@@ -48,6 +56,7 @@ class CustomLabelMetrics:
 
 
 class LocalArtifactStorers:
+    """IoC container for LocalArtifactStorer providers."""
     from mercury_ml.common.artifact_storage import local, mongo
 
     store_pandas_pickle = local.store_pandas_pickle
