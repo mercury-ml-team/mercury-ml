@@ -21,6 +21,6 @@ def get_custom_loss(loss_function_getter_name, loss_function_getter_params):
     :return: A vanilla Keras loss function
     """
 
-    from mercury_ml.tensorflow import custom_loss_functions
+    from mercury_ml.tensorflow import LossFunctions
 
-    return getattr(custom_loss_functions, loss_function_getter_name)(**loss_function_getter_params)
+    return getattr(LossFunctions, loss_function_getter_name)(**loss_function_getter_params)

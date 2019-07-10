@@ -10,10 +10,21 @@ class ModelLoaders:
     load_hdf5 = model_loading.load_hdf5_model
 
 
+class LossFunctions:
+    from mercury_ml.tensorflow import custom_loss_functions
+    get_weighted_loss_function = custom_loss_functions.get_weighted_loss_function
+    get_mock_loss_function = custom_loss_functions.get_mock_loss_function
+
+
 class LossFunctionFetchers:
     from mercury_ml.tensorflow import loss_function_fetching
     get_keras_loss = loss_function_fetching.get_keras_loss
     get_custom_loss = loss_function_fetching.get_custom_loss
+
+
+class Optimizers:
+    from mercury_ml.tensorflow import custom_optimizers
+    get_mock_optimizer=custom_optimizers.get_mock_optimizer
 
 
 class OptimizerFetchers:
