@@ -5,8 +5,8 @@ from mercury_ml.common.data_set import DataSet
 from mercury_ml.common.data_wrappers.spark import SparkDataWrapper
 
 def read_spark_data_set(source_table, where_clause, full_data_columns, index_columns, features_columns, targets_columns):
-    from mercury_ml.h2o.session import get_or_create_spark
-    spark = get_or_create_spark() #TODO this should be only "get" at this stage
+    from mercury_ml.spark.session import get_or_create_spark_session
+    spark = get_or_create_spark_session() #TODO this should be only "get" at this stage
     spark_df = spark.sql(
         "SELECT * FROM {} WHERE {}".format(source_table, where_clause)
     )
